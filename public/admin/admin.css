@@ -1,0 +1,53 @@
+.eligibilite .checkbox > label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.eligibilite input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.eligibilite .checkbox > label span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  margin-left: 10px;
+  width: max-content;
+}
+
+.eligibilite .checkbox > label span:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.eligibilite .checkbox > label input:checked ~ span:after {
+  display: block;
+}
+
+/* Style the indicator */
+.eligibilite .checkbox > label span:after {
+  left: -14px;
+  top: 7px;
+  width: 5px;
+  height: 10px;
+  border: solid rgb(26, 122, 23);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

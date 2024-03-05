@@ -1,0 +1,169 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+  locale: en
+  locales: en|fr
+  uploads_dir: "%kernel.project_dir%/public/uploads"
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+
+  app.listener.redirect_404_to_homepage:
+    class: App\EventListener\Redirect404ToHomepageListener
+    arguments:
+      - "@router"
+    tags:
+      - {
+          name: kernel.event_listener,
+          event: kernel.exception,
+          method: onKernelException,
+        }
+
+  App\EventListener\EntityListener:
+    arguments:
+      - "@security.helper"
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: preRemove }
+
+  acme_api.event.authentication_success_listener:
+    class: App\EventListener\AuthenticationSuccessListener
+    tags:
+      - {
+          name: kernel.event_listener,
+          event: lexik_jwt_authentication.on_authentication_success,
+          method: onAuthenticationSuccessResponse,
+        }
+
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
+
+  #sonata admin services
+  admin.region:
+    class: App\Admin\RegionAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Region, controller: ~, manager_type: orm, group: Localisation, icon: '<i class="fa fa-location-arrow" aria-hidden="true"></i>', label: Région }
+
+  admin.division:
+    class: App\Admin\DivisionAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Division, controller: ~, manager_type: orm, group: Localisation, label: Département }
+
+  admin.sub_division:
+    class: App\Admin\SubDivisionAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\SubDivision, controller: ~, manager_type: orm, group: Localisation, label: Communes }
+
+  admin.form_structure:
+    class: App\Admin\FormStructureAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\FormStructure, controller: ~, manager_type: orm, group: Structure, icon: '<i class="fa fa-building-o"></i>', label: Formes }
+
+  admin.order:
+    class: App\Admin\OrderAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Order, controller: ~, manager_type: orm, group: Structure, label: Ordres }
+
+  admin.langue:
+    class: App\Admin\LangueAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Langue, controller: ~, manager_type: orm, group: Structure, label: Sous-Système }
+  
+  admin.structure:
+    class: App\Admin\StructureAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Structure, controller: App\Controller\StructureAdminController, manager_type: orm, group: Structure, label: Structure }
+    calls:
+      - [addChild, ["@admin.compte_bancaire", "structure"]]
+
+  admin.compte_bancaire:
+    class: App\Admin\CompteBancaireAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\CompteBancaire, controller: ~, manager_type: orm, group: Structure, label: Compte Bancaire }
+        
+  admin.document:
+    class: App\Admin\DocumentAdmin
+    calls:
+      - [setTranslationDomain, ["App"]]
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Document,
+          controller: ~,
+          manager_type: orm,
+          group: Structure,
+          label: Documents (Pictures),
+        }
+  
+  admin.piece:
+    class: App\Admin\PieceAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Piece, controller: ~, manager_type: orm, group: Demandes, icon: '<i class="fa fa-files-o" aria-hidden="true"></i>', label: Pièces exigées }
+
+  admin.session:
+    class: App\Admin\SessionAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Session, controller: App\Controller\SessionAdminController, manager_type: orm, group: Demandes, label: Sessions }
+
+  admin.demande:
+    class: App\Admin\DemandeAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Demande, controller: ~, manager_type: orm, group: Demandes, label: Toutes les demandes }
+    calls:
+      - [addChild, ["@admin.demande_piece", "demande"]]
+
+  admin.demande_transmise:
+    class: App\Admin\DemandeTransmiseAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Demande, controller: ~, manager_type: orm, group: Demandes, label: Demandes Reçues }
+    calls:
+      - [addChild, ["@admin.demande_piece", "demande"]]
+  
+  admin.demande_notee:
+    class: App\Admin\DemandeNoteeAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Demande, controller: App\Controller\DemandeAdminController, manager_type: orm, group: Demandes, label: Demandes Notées }
+
+  admin.demande_rejetee:
+    class: App\Admin\DemandeRejeteeAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Demande, controller: ~, manager_type: orm, group: Demandes, label: Demandes Rejetées }
+  
+  admin.demande_validee:
+    class: App\Admin\DemandeValideeAdmin
+    arguments:
+      - '@security.token_storage'
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Demande, controller: ~, manager_type: orm, group: Demandes, label: Subventions }
+
+
+  admin.demande_piece:
+    class: App\Admin\DemandePieceAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\DemandePiece, controller: ~, manager_type: orm, group: admin, label: DemandePiece }

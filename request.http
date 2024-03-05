@@ -1,0 +1,10 @@
+
+GET https://services.minesec.gov.cm/api/v1/structures/47 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MDg5NDk1OTcsImV4cCI6MTcwODk1MzE5Nywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiS3Jpc3RlbiJ9.K1c9cWlVlqENlK_sgYJ7wKRdfu1uu5IAiTc-f1sQN-N4OAydm2ApZaVpcegC8SHoa304Zz_h3o9lEH8IpQfiLcPEWswfKQiNZWmh--bYDEWc60JjLUtrg3ZS_T4z-2Km85kfrgBLB2NDuDGBieV9R5FMX6fHg7MPZghFQOCkE5SYAPyQ91mpOQaqPSHZfao8zl5sQt2lw60ta1yfmnx_QEuksJb3jBanoqh0MYbERNRi0_EteoLquNVKo-1zH3uObx0EXVLhyYTxssb598wpEHTuDpYcIBWO13ORU0KLq9vEMUrmQIMRPnA821lz0746ChveHPQkzXvemL8ay1hCpg
+
+{
+    "client": -1,
+    "typeClient": "unknown",
+    "description": "R.A.S"
+}
