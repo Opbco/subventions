@@ -61,7 +61,7 @@ const SignupForm = (props) => {
     code_immatriculation: yup
       .string()
       .required(props.t("required", { ns: "login" }))
-      .min(8, props.t("error_immatriculation_length", { ns: "login" }))
+      .min(5, props.t("error_immatriculation_length", { ns: "login" }))
       .test(
         "code_immatriculation-exists",
         props.t("immatriculation_nexist", { ns: "login" }),

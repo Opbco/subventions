@@ -34,7 +34,7 @@ const Contact = (props) => {
         >
           <CallIcon />
           <Link sx={{ color: "#29b027" }} href="tel:674921111" target="_blank">
-            674 92 11 11
+            674 92 11 11 / 674 58 16 07
           </Link>
         </Stack>
         <Stack

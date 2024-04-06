@@ -436,7 +436,7 @@ const NewDemande = (props) => {
                         <Typography variant="body1">
                           Tel:{" "}
                           <a href="tel:677378455" target="_blank">
-                            677 37 84 55 / 694 29 81 31
+                            677 37 84 55 / 694 29 81 31 / 677 686 474
                           </a>
                         </Typography>
                         <Typography variant="body2">
@@ -454,7 +454,7 @@ const NewDemande = (props) => {
                         <Typography variant="body1">
                           Tel:{" "}
                           <a href="tel:674921111" target="_blank">
-                            674 92 11 11
+                            674 92 11 11 / 674 58 16 07
                           </a>
                         </Typography>
                         <Typography variant="body2">
