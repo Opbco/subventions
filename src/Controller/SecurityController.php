@@ -75,4 +75,22 @@ class SecurityController extends AbstractController
             return new JsonResponse($jsonDocument, Response::HTTP_BAD_REQUEST);
         }
     }
+
+    #[Route('/api/open/username', name: 'app_verif_username', methods: ['POST'])]
+    public function verif_username(Request $request, SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+        try {
+            $user = $userRepository->findByUserName($data["username"]);
+            if($user){
+               throw new \Exception("Username already used");  
+            }
+            $jsonDocument = $serializer->serialize(["success"=>true, "message" => "Username free"], 'json');
+            return new JsonResponse($jsonDocument, Response::HTTP_OK);
+        } catch (Exception $ex) {
+            $jsonDocument = $serializer->serialize(["success"=>false, "message" => $ex->getMessage()], 'json');
+            return new JsonResponse($jsonDocument, Response::HTTP_BAD_REQUEST);
+        }
+    }
 }

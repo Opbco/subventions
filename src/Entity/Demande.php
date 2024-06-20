@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ApiResource]
 class Demande
 {
+    const STATUTS = ["Brouillon", "Reçu", "Notée", "Validée", "Rejetée"];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -127,7 +129,7 @@ class Demande
     #[Groups(["demande.details", "demande.list"])]
     private ?int $statut = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(["demande.details", "demande.list"])]
     private ?string $remark = null;
 
@@ -431,7 +433,7 @@ class Demande
 
     public function getReverseRetenuFiscPt(): ?int
     {
-        return $this->reverseRetenuFisc;
+        return $this->reverseRetenuFisc ? 1 : 0;
     }
 
     public function setReverseRetenuFisc(?bool $reverseRetenuFisc): self
@@ -448,7 +450,7 @@ class Demande
 
     public function getApsCnpsPt(): ?int
     {
-        return $this->apsCnps;
+        return $this->apsCnps ? 1 : 0;
     }
 
     public function setApsCnps(?bool $apsCnps): self
@@ -584,6 +586,11 @@ class Demande
         return $this->statut;
     }
 
+    public function getStatutText(): ?string
+    {
+        return self::STATUTS[$this->statut];
+    }
+
     public function setStatut(int $statut): self
     {
         $this->statut = $statut;
@@ -637,7 +644,7 @@ class Demande
         return $this->cleanSchool;
     }
 
-    public function getCleanSchoolPt(): ?bool
+    public function getCleanSchoolPt(): ?int
     {
         return $this->cleanSchool?1:0;
     }
@@ -672,7 +679,7 @@ class Demande
 
     public function getScore(): ?int
     {
-        return $this->structure->getTypeStructure() != 'Etablissement'? 0 : $this->getPtEffectifs() + $this->getAssuranceElevePt() + $this->getCotisationSeducPt() + $this->getPositionGeoPt() + $this->getApsCnpsPt() + $this->getReverseRetenuFiscPt() + $this->getPercentExamenPt() + $this->getPersonnelsPt() + $this->getPermaVacatairePt() + $this->getConformitePt() + $this->getEquipementsPt() + $this->mesuresBarieres + $this->cleanSchool + $this->getDigitalisationPt();
+        return $this->structure->getTypeStructure() != 'Etablissement'? 0 : $this->getPtEffectifs() + $this->getQuoteFenascoPt() + $this->getAssuranceElevePt() + $this->getCotisationSeducPt() + $this->getPositionGeoPt() + $this->getApsCnpsPt() + $this->getReverseRetenuFiscPt() + $this->getPercentExamenPt() + $this->getPersonnelsPt() + $this->getPermaVacatairePt() + $this->getConformitePt() + $this->getEquipementsPt() + $this->mesuresBarieres + $this->cleanSchool + $this->getDigitalisationPt();
     }
 
     public function getPermaVacataire(): ?float

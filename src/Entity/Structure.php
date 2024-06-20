@@ -138,7 +138,7 @@ class Structure
     {
         $isEts = $this->getTypeStructure() == 'Etablissement';
         
-        return $isEts and in_array($this->getForme()->getId(), array(2, 4, 5, 6), true);
+        return $isEts and in_array($this->getForme()->getId(), array(2, 4, 5), true);
     }
 
     public function __toString()

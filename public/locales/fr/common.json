@@ -47,6 +47,7 @@
         "cancel": "Je ne veux pas imprimer"
     },
     "message":{
+        "file_upload_wrongname": "Le nom du fichier à téléverser ne doit pqs contenir des espaces, apostrophes, accents et caractères spéciaux. vous pouvez utiliser des underscores à la place des espaces.",
         "file_not_attached": "Piece pas encore jointe",
         "file_upload_success": "Fichier uploadé avec succès.",
         "delete_piece": "Voulez-vous supprimer le fichier sélectionné?",

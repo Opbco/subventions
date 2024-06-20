@@ -118,7 +118,10 @@ final class DemandePieceAdmin extends AbstractAdmin
             ->add('id')
             ->add('piece', null, ['label' => 'Pièce'])
             ->add('file', 'file', ['label' => 'Fichier', 'template' => '@SonataAdmin/CRUD/base_show_file.html.twig'])
-            ->add('statut', null, ['label' => 'Statut'])
+            ->add('statut', FieldDescriptionInterface::TYPE_CHOICE, [
+                'choices' => DemandePiece::$codesStatut,
+                'label' => 'Status'
+            ])
             ->add('date_created', null, ['label' => 'Créé le'])
             ->add('date_updated', null, ['label' => 'Modifié le'])
             ->add('user_created.username', null, ['label' => 'Créé par'])

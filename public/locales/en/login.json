@@ -22,5 +22,6 @@
     "email": "Email address",
     "confirm_email": "Confirm Email address",
     "confirm_password": "Confirm password",
-    "email_exist": "This email is already used"
+    "email_exist": "This email is already used",
+    "username_exist": "This username is already taken"
 }

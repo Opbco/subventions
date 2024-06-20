@@ -23,6 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use function PHPUnit\Framework\isEmpty;
+
 class StructureController extends AbstractController
 {
     #[Route('/api/v1/sessions', name: 'app_session_current')]
@@ -200,7 +202,7 @@ class StructureController extends AbstractController
             }
             $compte = $structure->getCompteBancaire();
             if ($compte) {
-                if (file_exists($compte->getCopyRIB()->getFileAbsolutePath())) {
+                if (file_exists($compte->getCopyRIB()->getFileAbsolutePath()) and !str_starts_with($compte->getCopyRIB()->getFileName(), 'demande')) {
                     unlink($compte->getCopyRIB()->getFileAbsolutePath());
                 }
             }

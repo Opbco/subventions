@@ -1,0 +1,168 @@
+
+<style type="text/css">
+    <!--
+    table.page_header {width: 100%; border: none; border-bottom: solid 0.3mm #222; padding: 2mm; }
+    table.page_footer {width: 100%; border: none; border-top: solid 0.3mm #222; padding: 2mm; }
+    table.page_headings{width: 100%; border: none; margin-top: 6mm; }
+    table.page_tableau{width: 100%; border: 1px solid #000; margin-top: 10mm; }
+    th.heading { text-align: center; vertical-align: center; padding: 2mm; }
+    td.body { text-align: justify; vertical-align: center; padding: 2mm; }
+    td.body_center { text-align: center; vertical-align: center; padding: 2mm; font-weight:bold; font-size: 14; }
+    h1 { text-align: center; font-size: 20mm}
+    h3 { text-align: center; font-size: 14mm}
+    span { display: block; }
+    span.heading { font-size: 12px; font-weight: bold; }
+    span.subheading { font-size: 10px; font-weight: 800; }
+    .uppercase { text-transform: uppercase; }
+    .capitalize { text-transform: capitalize; }
+    -->
+</style>
+<page backtop="5mm" backbottom="5mm" backleft="5mm" backright="5mm"> 
+     <page_footer>
+          <table class="page_footer">
+               <tr>
+                    <td style="width: 33%; text-align: left;">
+                         MINESEC-CELINFO
+                    </td>
+                    <td style="width: 34%; text-align: center">
+                         [[page_cu]]/[[page_nb]]
+                    </td>
+                    <td style="width: 33%; text-align: right">
+                         &copy;OPBco {{ "now"|date("Y") }}
+                    </td>
+               </tr>
+          </table>
+     </page_footer>
+     <table class="page_headings">
+          <tr>
+               <td style="width: 50%; text-align: center; vertical-align: center;">
+                    <span class="heading uppercase">République du Cameroun</span><br />
+                    <span class="subheading capitalize">Paix - Travail - Patrie</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Ministère des enseignements secondaires</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Sécrétatiat Général</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Groupe de travail ministériel sur l'attribution de la subvention de l'état à l'enseignement privé, exercice {{ session.anneeScolaire }}</span><br />
+                    <span>***********</span>
+               </td>
+               <td style="width: 50%; text-align: center; vertical-align: center;">
+                    <span class="heading uppercase">Republic of Cameroon</span><br />
+                    <span class="subheading capitalize">Peace - Work - Fatherland</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Ministry of secondary education</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Secretariat general</span><br />
+                    <span>***********</span><br />
+                    <span class="heading uppercase">Ministerial work group in charge of the distribution of state financiak subvention to private education for the {{ session.anneeScolaire }} financial year</span><br />
+                    <span>***********</span>
+               </td>
+          </tr>
+     </table>
+     <p class="uppercase" style="text-align: center; margin-top: 5mm; margin-bottom: 3mm; font-size: 16px; font-weight: bold;">
+          Statistiques des dossiers de demandes de subvention reçus<br />
+          -EXERCICE {{ session.anneeScolaire }}-
+     </p>
+    <table border="0.5" class="page_tableau" cellspacing="0">
+        <tr style="background-color: #002; color: #fff; font-size: 12px; text-transform: capitalize;">
+            <th style="width: 20%;" class="heading">
+                Ordre d'enseignement
+            </th>
+            <th style="width: 20%;" class="heading">
+                Catholique
+            </th>
+            <th style="width: 20%;" class="heading">
+                Protestant
+            </th>
+            <th style="width: 20%;" class="heading">
+                Islamique
+            </th>
+            <th style="width: 10%;" class="heading">
+                Laïc
+            </th>
+            <th style="width: 10%;" class="heading">
+                Total
+            </th>
+        </tr>
+        <tr style="font-size: 12px; text-transform: uppercase;">
+            <th style="width: 20%;" class="heading">
+                DEN
+            </th>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 2)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 4)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 3)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 1)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                 {{ stats|filter(v => v.forme == "DEN")|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+        </tr>
+        <tr style="font-size: 12px; text-transform: uppercase;">
+            <th style="width: 20%;" class="heading">
+                DESTP
+            </th>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme != "DESG" and v.forme != "DEN" and v.ordreId == 2)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme != "DESG" and v.forme != "DEN" and v.ordreId == 4)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme != "DESG" and v.forme != "DEN" and v.ordreId == 3)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                {{ stats|filter(v => v.forme != "DESG" and v.forme != "DEN" and v.ordreId == 1)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                 {{ stats|filter(v => v.forme != "DESG" and v.forme != "DEN")|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+        </tr>
+        <tr style="font-size: 12px; text-transform: uppercase;">
+            <th style="width: 20%;" class="heading">
+                DESG
+            </th>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 2)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 4)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 3)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 1)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                 {{ stats|filter(v => v.forme == "DESG")|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+        </tr>
+        <tr style="font-size: 12px; text-transform: uppercase;">
+            <th style="width: 20%;" class="heading">
+                TOTAL
+            </th>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.ordreId == 2)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.ordreId == 4)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 20%;">
+                {{ stats|filter(v => v.ordreId == 3)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                {{ stats|filter(v => v.ordreId == 1)|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+            <td class="body_center" style="width: 10%;">
+                 {{ stats|reduce((total, v) => total + v.nbDem, 0) }}
+            </td>
+        </tr>
+    </table>
+</page>

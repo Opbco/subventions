@@ -80,8 +80,7 @@ final class DemandeNoteeAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'field_options' => [
                     'choices' => [
-                        'SENAT' => 'SENAT',
-                        'SEDUC' => 'SEDUC',
+                        'Organisation' => 'Organisation',
                         'Etablissement' => 'Etablissement'
                     ]
                 ], array('label' => 'Type Structure')
@@ -194,7 +193,7 @@ final class DemandeNoteeAdmin extends AbstractAdmin
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
         $query->andWhere($rootAlias. '.statut = 2');
-        if ($role != "ROLE_SUPER_ADMIN") {
+        if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
                 case 'ROLE_COMMISSION_DESG':
@@ -218,12 +217,17 @@ final class DemandeNoteeAdmin extends AbstractAdmin
 
     protected function configureExportFields(): array
     {
-        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'QuoteFenascoPt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'user_marking', 'user_updated'];
+        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'QuoteFenascoPt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'structure.compteBancaire.nameBanque', 'structure.compteBancaire.numero', 'structure.compteBancaire.intitule', 'user_marking', 'user_updated'];
     }
 
     protected function configureListFields(ListMapper $list): void
     {
         $list
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => [
+                    'show' => [],
+                ],
+            ])
             ->add('dateDemande', null, ['label' => 'Date'])
             ->add('structure.subdivision.division.region.name', null, ['label' => 'Région'])
             ->add('structure.subdivision.division.name', null, ['label' => 'Département'])
@@ -231,6 +235,12 @@ final class DemandeNoteeAdmin extends AbstractAdmin
             ->add('structure.typeStructure', null, ['label' => "Type"])
             ->add('structure.forme', null, ['label' => "Type d'enseignement"])
             ->add('structure.ordre', null, ['label' => "Ordre"])
+            ->add('structure.compteBancaire.numero', null, ['label'=>"Numéro", 'editable' => true, 'required' => true])
+            ->add('structure.compteBancaire.intitule', null, ['label'=>"Intitulé", 'editable' => true, 'required' => true])
+            ->add('structure.compteBancaire.copyRIB', FieldDescriptionInterface::TYPE_STRING, [
+                'label' => 'Name of the document',
+                'template' => '@SonataAdmin/CRUD/list_file.html.twig',
+            ])
             ->add('structure', null, ['label' => 'Structure'])
             ->add('ptEffectifs', null, ['label' => 'Effectifs'])
             ->add('assuranceElevePt', null, ['label' => 'Assurance'])
@@ -260,12 +270,7 @@ final class DemandeNoteeAdmin extends AbstractAdmin
                 ]);
             }
             $list->add('user_updated', null, ['label' => 'Notée par'])
-            ->add('date_updated', null, ['label' => 'Notée le'])
-            ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => [
-                    'show' => [],
-                ],
-            ]);
+            ->add('date_updated', null, ['label' => 'Notée le']);
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -491,6 +496,11 @@ final class DemandeNoteeAdmin extends AbstractAdmin
             ->add('date_updated', null, ['label' => 'Modifié le'])
             ->add('user_created.username', null, ['label' => 'Créé par'])
             ->add('user_updated.username', null, ['label' => 'Modifié par'])
+            ->end()
+            ->end()
+            ->tab('Pièces de la demande')
+            ->with('Pièces', ['class' => 'col-md-12'])
+            ->add('demandePieces', FieldDescriptionInterface::TYPE_ONE_TO_MANY, ['label' => 'documents attached'])
             ->end()
             ->end();
     }

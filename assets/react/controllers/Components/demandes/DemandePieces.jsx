@@ -139,6 +139,7 @@ const DemandePieces = (props) => {
   };
 
   const handleNewFile = async (e) => {
+    const valideFileNamePattern = /[ `!@#$%^&*()+\-=[\]{};':"\\|,<>\/?~]|[\u00C0-\u00FF\u0100-\u017F\u0180-\u024F]/;
     const allowedTypes = [
       "image/jpeg",
       "image/png",
@@ -157,6 +158,15 @@ const DemandePieces = (props) => {
       if (!allowedTypes.includes(e.target.files[0]?.type)) {
         props.setInfoMsg({
           message: t("message.file_upload_wrongtype"),
+          severity: "warning",
+        });
+        return false;
+      }
+
+      if (valideFileNamePattern.test(e.target.files[0].name)) {
+        console.log(e.target.files[0].name);
+        props.setInfoMsg({
+          message: t("message.file_upload_wrongname"),
           severity: "warning",
         });
         return false;

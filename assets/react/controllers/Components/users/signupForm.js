@@ -79,7 +79,21 @@ const SignupForm = (props) => {
           return response.status == 200;
         }
       ),
-    username: yup.string().required(props.t("required", { ns: "login" })),
+    username: yup.string().required(props.t("required", { ns: "login" })).test(
+      "username-exists",
+      props.t("username_exist", { ns: "login" }),
+      async (value) => {
+        const response = await fetch(`${CONSTANTS.BASE_URL}/api/open/username`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: value }),
+        });
+        
+        return response.status == 200;
+      }
+    ),
     plainPassword: yup
       .string()
       .required(props.t("required", { ns: "login" }))
@@ -113,7 +127,7 @@ const SignupForm = (props) => {
             },
             body: JSON.stringify({ email: value }),
           });
-          debounce()
+
           return response.status == 200;
         }
       ),

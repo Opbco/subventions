@@ -62,18 +62,28 @@ final class SessionAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('name', null, ['label'=>'Nom'])
             ->add('dateOpen', null, ['label'=>"Date d'ouverture"])
             ->add('dateClosed', null, ['label'=>'Date de fin'])
             ->add('anneeScolaire', null, ['label'=>'Année Budgétaire'])
             ->add('status', null, ['label'=>'Active', 'editable' => true])
-            ->add('date_created', null, ['label'=>'Créé le'])
             ->add('date_updated', null, ['label'=>'Modifié le'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],
                     'calculate' => [],
+                    'print_stat_der' => [
+                        'template' => '@SonataAdmin/CRUD/list__action_print_stats_der_global.html.twig'
+                    ],
+                    'print_stat_der_sc' => [
+                        'template' => '@SonataAdmin/CRUD/list__action_print_stats_der_sc.html.twig'
+                    ],
+                    'print_stat_der_scores' => [
+                        'template' => '@SonataAdmin/CRUD/list__action_print_stats_der_scores.html.twig'
+                    ],
+                    'print_stat_der_subvent' => [
+                        'template' => '@SonataAdmin/CRUD/list__action_print_stats_der_subvent.html.twig'
+                    ]
                 ],
             ]);
     }
@@ -97,9 +107,9 @@ final class SessionAdmin extends AbstractAdmin
             ->add('dateClosed', DateTimePickerType::class, ['label'=>'Date de fin', 'required' => true])
             ->add('anneeScolaire', null, ['label'=>'Année Budgétaire', 'required' => true])
             ->add('dotation', null, ['label'=>'Dotation budgétaire', 'required' => false])
-            ->add('percentSenat', PercentType::class, ['label'=>'Pourcentage SENAT', 'required' => false])
-            ->add('percentSeduc', PercentType::class, ['label'=>'Pourcentage SEDUC', 'required' => false])
-            ->add('percentEts', PercentType::class, ['label'=>'Pourcentage Etablissements', 'required' => false])
+            ->add('percentSenat', PercentType::class, ['label'=>'Pourcentage SENAT', 'required' => false, 'scale'=> 2])
+            ->add('percentSeduc', PercentType::class, ['label'=>'Pourcentage SEDUC', 'required' => false, 'scale'=> 2])
+            ->add('percentEts', PercentType::class, ['label'=>'Pourcentage Etablissements', 'required' => false, 'scale'=> 2])
             ->add('status', null, ['label'=>'Active'])
             ;
     }

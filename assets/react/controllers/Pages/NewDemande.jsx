@@ -67,7 +67,18 @@ const PieceContainer = styled("div")(`
 
 const NewDemande = (props) => {
   const { t } = useTranslation();
-  const [initialValues, setInitialValues] = useState({});
+  const [initialValues, setInitialValues] = useState({
+    nombreEleve: 0,
+    nombrePersonnelEnseignant: 0,
+    nombrePersonnelPermanent: 0,
+    personnel_autorise: false,
+    personnel_contract: false,
+    percentExamen: 0,
+    nomFondateur: "",
+    contactFondateur: "",
+    contacts: "",
+    isOrg,
+  });
   const [valide, setValide] = useState(false);
   const theme = useTheme();
   const isOrg = props.structure.quality !== "Etablissement";

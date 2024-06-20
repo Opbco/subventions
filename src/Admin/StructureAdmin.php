@@ -57,8 +57,7 @@ final class StructureAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'field_options' => [
                     'choices' => [
-                        'SENAT' => 'SENAT',
-                        'SEDUC' => 'SEDUC',
+                        'Organisation' => 'Organisation',
                         'Etablissement' => 'Etablissement'
                     ]
                 ], array('label' => 'Type Structure')
@@ -102,7 +101,7 @@ final class StructureAdmin extends AbstractAdmin
                 ],
                 'callback' => static function ($queryBuilder, $alias, $property, $value): void {
                     $queryBuilder
-                        ->andWhere($alias . '.typeStructure = :typeValue')
+                        ->andWhere($alias . '.typeStructure <> :typeValue')
                         ->setParameter('typeValue', 'Etablissement');
                     $queryBuilder->setValue($property, $value);
                 },
@@ -217,8 +216,7 @@ final class StructureAdmin extends AbstractAdmin
             ->with('Identification', ['class' => 'col-md-6'])
             ->add('typeStructure', ChoiceType::class, array('choices' => [
                 'Choisir' => '',
-                'SENAT' => 'SENAT',
-                'SEDUC' => 'SEDUC',
+                'Organisation' => 'Organisation',
                 'Etablissement' => 'Etablissement'
             ], 'label' => 'Type', 'required' => true))
             ->add('code', null, ['label' => "Numéro d'immatriculation", 'required' => false])
@@ -315,7 +313,7 @@ final class StructureAdmin extends AbstractAdmin
      
     protected function configureExportFields(): array
     {
-        return ['subdivision.division.region.name', 'subdivision.division.name', 'subdivision', 'typeStructure', 'forme', 'ordre', 'langue', 'cycle', 'code', 'name', 'contacts', 'isActive', 'adresse', 'latitude', 'longitude', 'zone', 'nomFondateur', 'contactFondateur', 'user_updated', 'hierarchie'];
+        return ['subdivision.division.region.name', 'subdivision.division.name', 'subdivision', 'typeStructure', 'forme', 'ordre', 'langue', 'cycle', 'code', 'name', 'contacts', 'isActive', 'adresse', 'latitude', 'longitude', 'zone', 'nomFondateur', 'contactFondateur', 'user_updated', 'hierarchie', 'user.email'];
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
@@ -325,7 +323,7 @@ final class StructureAdmin extends AbstractAdmin
 
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
-        if ($role != "ROLE_SUPER_ADMIN") {
+        if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
                     $query

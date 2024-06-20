@@ -64,8 +64,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'field_options' => [
                     'choices' => [
-                        'SENAT' => 'SENAT',
-                        'SEDUC' => 'SEDUC',
+                        'Organisation' => 'Organisation',
                         'Etablissement' => 'Etablissement'
                     ]
                 ], array('label' => 'Type Structure')
@@ -172,7 +171,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
         $query->andWhere($rootAlias. '.statut = 1');
-        if ($role != "ROLE_SUPER_ADMIN") {
+        if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
                 case 'ROLE_COMMISSION_DESG':
@@ -265,8 +264,10 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                 $object->setStatut(4);    
             }
 
-            $object->setRemark($remark);
         }
+		
+		$remark .= $object->getRemark();
+        $object->setRemark($remark);
     }
 
     protected function configureFormFields(FormMapper $form): void

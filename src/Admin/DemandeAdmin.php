@@ -78,8 +78,7 @@ final class DemandeAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'field_options' => [
                     'choices' => [
-                        'SENAT' => 'SENAT',
-                        'SEDUC' => 'SEDUC',
+                        'Organisation' => 'Organisation',
                         'Etablissement' => 'Etablissement'
                     ]
                 ], array('label' => 'Type Structure')
@@ -170,7 +169,7 @@ final class DemandeAdmin extends AbstractAdmin
 
     protected function configureExportFields(): array
     {
-        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'montant', 'statut', 'date_created', 'date_updated', 'user_created', 'user_updated'];
+        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.hierarchie', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'points', 'montant', 'statut', 'date_created', 'date_updated', 'user_created', 'user_marking', 'user_updated'];
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
@@ -181,7 +180,7 @@ final class DemandeAdmin extends AbstractAdmin
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
 
-        if ($role != "ROLE_SUPER_ADMIN") {
+        if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
                 case 'ROLE_COMMISSION_DESG':

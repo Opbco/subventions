@@ -22,5 +22,6 @@
     "error_email": "Ceci n'est pas une adresse email valide",
     "confirm_email": "Confirmer l'adresse email",
     "confirm_password": "Confirmer le mot de passe",
-    "email_exist": "Cet email est déjà utilisé."
+    "email_exist": "Cet email est déjà utilisé.",
+    "username_exist": "Ce non d'utilisateur est déjà pris"
 }

@@ -43,6 +43,7 @@
         "cancel": "I don't want to print"
     },
     "message":{
+        "file_upload_wrongname": "The file name should not contain spaces, accents, and special caracters. you can replace spaces with underscores.",
         "file_not_attached": "File not yet attached",
         "file_upload_success": "File uploaded successfuly.",
         "delete_piece": "Do you want to delete the selected file?",

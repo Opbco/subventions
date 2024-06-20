@@ -83,7 +83,7 @@ class DemandePiece
 
     public function __toString()
     {
-        return $this->demande . ' ' . $this->piece;
+        return 'Demande No '. $this->demande->getId() . ', ' . $this->piece;
     }
 
     public function getId(): ?int

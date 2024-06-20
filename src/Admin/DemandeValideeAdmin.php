@@ -64,8 +64,7 @@ final class DemandeValideeAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'field_options' => [
                     'choices' => [
-                        'SENAT' => 'SENAT',
-                        'SEDUC' => 'SEDUC',
+                        'Organisation' => 'Organisation',
                         'Etablissement' => 'Etablissement'
                     ]
                 ], array('label' => 'Type Structure')
@@ -178,7 +177,7 @@ final class DemandeValideeAdmin extends AbstractAdmin
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
         $query->andWhere($rootAlias. '.statut = 3');
-        if ($role != "ROLE_SUPER_ADMIN") {
+        if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
                 case 'ROLE_COMMISSION_DESG':
@@ -202,7 +201,7 @@ final class DemandeValideeAdmin extends AbstractAdmin
 
     protected function configureExportFields(): array
     {
-        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'QuoteFenascoPt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'montant', 'date_created', 'date_updated', 'user_created', 'user_updated'];
+        return ['structure.subdivision.division.region.name', 'structure.subdivision.division.name', 'structure.subdivision', 'structure.typeStructure', 'structure.forme', 'structure.ordre', 'structure.name', 'ptEffectifs', 'assuranceElevePt', 'QuoteFenascoPt', 'cotisationSeducPt', 'positionGeoPt', 'apsCnpsPt', 'reverseRetenuFiscPt', 'percentExamenPt', 'personnelsPt', 'permaVacatairePt', 'conformitePt', 'equipementsPt', 'mesuresBarieresPt', 'cleanSchoolPt', 'digitalisationPt', 'score', 'montant', 'structure.compteBancaire.nameBanque', 'structure.compteBancaire.numero', 'structure.compteBancaire.intitule', 'date_created', 'date_updated', 'user_created', 'user_updated'];
     }
 
     protected function configureListFields(ListMapper $list): void

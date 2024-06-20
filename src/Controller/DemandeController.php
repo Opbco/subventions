@@ -5,13 +5,16 @@ namespace App\Controller;
 use App\Entity\Demande;
 use App\Entity\DemandePiece;
 use App\Entity\Document;
+use App\Entity\Session;
 use App\Entity\Structure;
 use App\Repository\DemandePieceRepository;
 use App\Repository\DemandeRepository;
 use App\Repository\PieceRepository;
 use App\Service\Base64FileExtractor;
-use App\Service\UploadedBase64File;
+use App\Service\Html2PdfService;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-use function PHPUnit\Framework\directoryExists;
+use function PHPUnit\Framework\isNull;
 
 class DemandeController extends AbstractController
 {
@@ -43,6 +46,53 @@ class DemandeController extends AbstractController
         }
 
         return new JsonResponse($serializer->serialize($demandes, 'json', ['groups' => 'demande.list']), Response::HTTP_OK, [], true);
+    }
+
+    #[Route('/api/open/demandes', name: 'app_demandes_get_powerbi', methods: ["GET"])]
+    public function get_all_demandes_forPowerBi(Request $request, DemandeRepository $demandeRepository, SerializerInterface $serializer): JsonResponse
+    {
+
+        $demandes = $demandeRepository->findAll();
+        $data = array();
+        foreach ($demandes as $key => $demande) {
+            $data[] = array(
+                "id" => $demande->getId(),
+                "session" => $demande->getSession()->getAnneeScolaire(),
+                "region" => $demande->getStructure()->getSubdivision()->getDivision()->getRegion()->getName(),
+                "division" => $demande->getStructure()->getSubdivision()->getDivision()->getName(),
+                "subdivision" => trim($demande->getStructure()->getSubdivision()->getName()),
+                "ordre" => $demande->getStructure()->getOrdre()->getName(),
+                "type" => $demande->getStructure()->getTypeStructure(),
+                "forme" => $demande->getStructure()->getForme()->getName(),
+                "seduc_senat" => isNull($demande->getStructure()->getHierarchie())? "" : $demande->getStructure()->getHierarchie()->getName(),
+                "name" => $demande->getStructure()->getName(),
+                "effectif_eleves" => $demande->getPtEffectifs(),
+                "assurance_eleves" => $demande->getAssuranceElevePt(),
+                "quote_part_fenasco" => $demande->getQuoteFenascoPt(),
+                "cotisation_seduc" => $demande->getCotisationSeducPt(),
+                "position_geographique" => $demande->getPositionGeoPt(),
+                "aps_cnps" => $demande->getApsCnpsPt(),
+                "reverse_retenu_fiscale" => $demande->getReverseRetenuFiscPt(),
+                "pourcentage_examen" => $demande->getPercentExamenPt(),
+                "personnels" => $demande->getPersonnelsPt(),
+                "ration_permanent_vacataire" => $demande->getPermaVacatairePt(),
+                "conformite" => $demande->getConformitePt(),
+                "equipements" => $demande->getEquipementsPt(),
+                "mesures_barieres" => $demande->getMesuresBarieresPt(),
+                "clean_school" => $demande->getCleanSchoolPt(),
+                "digitalisation" => $demande->getDigitalisationPt(),
+                "score" => $demande->getScore(),
+                "montant" => $demande->getMontant(),
+                "statut" => $demande->getStatutText(),
+                "user_created" => $demande->getUserCreated().'',
+                "user_updated" => $demande->getUserUpdated().'',
+                "user_marking" => $demande->getUserMarking().'',
+                "date_updated" => $demande->getDateUpdated(),
+            );
+        }
+        $jsonResponse = $serializer->serialize($data, 'json');
+
+        return new JsonResponse($jsonResponse, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/v1/demandes/{id}', name: 'app_demande_details', methods: ["GET"])]
@@ -161,4 +211,61 @@ class DemandeController extends AbstractController
         $jsonError = $serializer->serialize(['success' => false, 'message' => "Bad request"], 'json');
         return new JsonResponse($jsonError, Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('/sessions/{id}/statsderg', name: 'app_print_stats_der_global', methods: ['GET'])]
+    public function generateFicheStatistiquePdf(Request $request, Connection $connection, EntityManagerInterface $em, Html2PdfService $html2PdfService, Session $session): Response
+    {
+        $kind = $request->query->get('kind', "snder");
+
+        $query = ""; 
+        $template = '';
+
+        switch ($kind) {
+            case 'sndersc':
+                $template = 'pdf/situation_statistique_sscom.html.twig';
+                $query = "SELECT `forme`, `ordreId`, `nbDem` FROM `statistics_demandes_recues` WHERE `sessionId` = ".$session->getId();
+                break;
+            case 'snderrepets':
+                $template = 'pdf/situation_statistique_repets.html.twig';
+                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
+                break;
+            case 'snderstsub':
+                $template = 'pdf/situation_statistique_struct_sub.html.twig';
+                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
+                break;
+            default:
+                $template = 'pdf/situation_statistique.html.twig';
+                $query = "SELECT `forme`, `ordreId`, `nbDem` FROM `statistics_demandes_recues` WHERE `sessionId` = ".$session->getId();
+                break;
+        }
+
+        $stmt = $connection->executeQuery($query);
+        $result= $stmt->fetchAllAssociative();
+
+        $pdfContent = $html2PdfService->createPdfFromTemplate($template, [
+            "session" => $session,
+            "stats" => $result,
+        ]);
+
+        return new Response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="situation_statistique_demandes_recus_'.$session->getName().'.pdf"'
+        ]);
+    }
+
+
+    /* #[Route('/admin/demandes/fix', name: 'app_demande_fix_score', methods: ["GET"])]
+    public function fix_demande_score(DemandeRepository $demandeRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $demandes = $demandeRepository->findAll();
+
+        foreach ($demandes as $key => $demande) {
+            $demande->setPoints($demande->getScore());
+            $em->persist($demande);
+        }
+
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK, [], false);
+    } */
 }
