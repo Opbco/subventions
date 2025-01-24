@@ -1,10 +1,11 @@
 {
-  "build/app.css": "/build/app.f4d4dadb.css",
-  "build/app.js": "/build/app.881ae14e.js",
-  "build/runtime.js": "/build/runtime.a5120e41.js",
-  "build/856.e05decf4.js": "/build/856.e05decf4.js",
-  "build/894.62178d8a.js": "/build/894.62178d8a.js",
-  "build/921.d96cd829.js": "/build/921.d96cd829.js",
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_dompurify_dist_purify_js.js": "/build/vendors-node_modules_dompurify_dist_purify_js.js",
+  "build/vendors-node_modules_canvg_lib_index_es_js.js": "/build/vendors-node_modules_canvg_lib_index_es_js.js",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-9faedc.css": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-9faedc.css",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-9faedc.js": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-9faedc.js",
   "build/fonts/roboto-latin-500-normal.woff2": "/build/fonts/roboto-latin-500-normal.f25d774e.woff2",
   "build/fonts/roboto-latin-700-normal.woff2": "/build/fonts/roboto-latin-700-normal.227c9319.woff2",
   "build/fonts/roboto-latin-400-normal.woff2": "/build/fonts/roboto-latin-400-normal.b009a76a.woff2",
@@ -60,5 +61,9 @@
   "build/fonts/roboto-greek-ext-500-normal.woff": "/build/fonts/roboto-greek-ext-500-normal.eaa367bb.woff",
   "build/fonts/roboto-greek-ext-300-normal.woff": "/build/fonts/roboto-greek-ext-300-normal.392a45a8.woff",
   "build/fonts/roboto-greek-ext-400-normal.woff": "/build/fonts/roboto-greek-ext-400-normal.f708607d.woff",
-  "build/fonts/roboto-greek-ext-700-normal.woff": "/build/fonts/roboto-greek-ext-700-normal.24985377.woff"
+  "build/fonts/roboto-greek-ext-700-normal.woff": "/build/fonts/roboto-greek-ext-700-normal.24985377.woff",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-4120ab.css": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-4120ab.css",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-4120ab.js": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-4120ab.js",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.css": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.css",
+  "build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.js": "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.js"
 }

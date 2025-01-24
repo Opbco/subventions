@@ -77,6 +77,29 @@
     "demande":{
         "group":"Human ressources and students"
     },
+    "table":{
+        "reference": "Reference",
+        "dateDemande": "Date",
+        "ptEffectifs": "Number of students",
+        "assuranceElevePt": "Insurance",
+        "QuoteFenascoPt": "FENASCO",
+        "cotisationSeducPt": "contribution to SEDUC",
+        "positionGeoPt": "Geographical position",
+        "apsCnpsPt": "NISF",
+        "reverseRetenuFiscPt": "Tax income",
+        "percentExamenPt": "Exams percent",
+        "personnelsPt": "Personnels (P+T)",
+        "permaVacatairePt": "Ration P/T",
+        "conformitePt" : "C.I",
+        "equipementsPt": "Equipments",
+        "mesuresBarieresPt" : "Barrier Measures",
+        "cleanSchoolPt": "Clean School",
+        "digitalisationPt": "Digitalisation",
+        "score": "Score",
+        "status": "Status",
+        "montant": "Amount",
+        "observation": "Observation"
+    },
     "form": {
         "contacts":"Structure's contacts",
         "submit_compte": "Save",

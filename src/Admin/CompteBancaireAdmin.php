@@ -77,7 +77,7 @@ final class CompteBancaireAdmin extends AbstractAdmin
     {
         $form
             ->add('nameBanque', null, ['label'=>"Banque", 'required' => true])
-            ->add('numero', null, ['label'=>"Numéro", 'editable' => true, 'required' => true])
+            ->add('numero', null, ['label'=>"Numéro", 'required' => true])
             ->add('intitule', null, ['label'=>"Intitulé", 'required' => true])
             ->add('copyRIB', AdminType::class, [
                 'delete' => true, 'label' => 'Photo du RIB'

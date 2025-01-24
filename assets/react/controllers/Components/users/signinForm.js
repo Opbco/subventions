@@ -13,6 +13,7 @@ import {
   styled,
   Box,
   Avatar,
+  Stack,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { LoadingButton } from "@mui/lab";
@@ -156,6 +157,18 @@ const SigninForm = (props) => {
               error={!!touched.password && !!errors.password}
               helperText={touched.password && errors.password}
             />
+            <Stack flexDirection="row" justifyContent="flex-end" alignItems="center">
+              <Link
+                component="button"
+                variant="body1"
+                sx={{ color: "#d32f2f", textDecorationColor: "#d32f2f" }}
+                onClick={() => {
+                  props.reset();
+                }}
+              >
+                {props.t("want_reset", { ns: "login" })}
+              </Link>
+            </Stack>
             <LButton
               type="submit"
               variant="contained"
@@ -167,7 +180,7 @@ const SigninForm = (props) => {
             </LButton>
             <Grid container>
               <Grid item xs>
-              <Link
+                <Link
                   component="button"
                   variant="body1"
                   sx={{ color: "#3d8514" }}

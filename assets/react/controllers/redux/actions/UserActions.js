@@ -56,6 +56,29 @@ export const registerUser = (userData, navigate) => (dispatch) => {
     });
 };
 
+export const resetUser = (userData, navigate) => (dispatch) => {
+  dispatch(IS_BUSY());
+  publicAxios
+    .post("/api/reset", userData)
+    .then((res) => {
+      if (res.status === 200) {
+        dispatch(
+          loginUser(
+            { username: userData.code_immatriculation, password: userData.plainPassword },
+            navigate,
+            "/"
+          )
+        );
+      } else {
+        dispatch(SET_ERRORS(res.data.message));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch(SET_ERRORS(err.response?.data));
+    });
+};
+
 export const logoutUser = (navigate) => (dispatch) => {
   dispatch(CLEAR_MENU());
   dispatch(UNAUTHENTICATED());

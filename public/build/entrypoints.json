@@ -2,12 +2,13 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.a5120e41.js",
-        "/build/921.d96cd829.js",
-        "/build/app.881ae14e.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.f4d4dadb.css"
+        "/build/vendors-node_modules_mui_icons-material_AccountBalance_js-node_modules_mui_icons-material_Att-e39238.css",
+        "/build/app.css"
       ]
     }
   }

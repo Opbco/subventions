@@ -107,9 +107,9 @@ final class SessionAdmin extends AbstractAdmin
             ->add('dateClosed', DateTimePickerType::class, ['label'=>'Date de fin', 'required' => true])
             ->add('anneeScolaire', null, ['label'=>'Année Budgétaire', 'required' => true])
             ->add('dotation', null, ['label'=>'Dotation budgétaire', 'required' => false])
-            ->add('percentSenat', PercentType::class, ['label'=>'Pourcentage SENAT', 'required' => false, 'scale'=> 2])
-            ->add('percentSeduc', PercentType::class, ['label'=>'Pourcentage SEDUC', 'required' => false, 'scale'=> 2])
-            ->add('percentEts', PercentType::class, ['label'=>'Pourcentage Etablissements', 'required' => false, 'scale'=> 2])
+            ->add('percentSenat', PercentType::class, ['label'=>'Pourcentage SENAT', 'required' => false, 'scale' => 2])
+            ->add('percentSeduc', PercentType::class, ['label'=>'Pourcentage SEDUC', 'required' => false, 'scale' => 2])
+            ->add('percentEts', PercentType::class, ['label'=>'Pourcentage Etablissements', 'required' => false, 'scale' => 2])
             ->add('status', null, ['label'=>'Active'])
             ;
     }

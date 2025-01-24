@@ -65,6 +65,9 @@ class Piece
     #[Groups(['piece.list', 'demande.details'])]
     private ?bool $compulsory = null;
 
+    #[ORM\Column(options:['default' => 0])]
+    private ?bool $isPermanent = null;
+
     public function __toString()
     {
         return $this->name;
@@ -191,6 +194,18 @@ class Piece
     public function setCompulsory(bool $compulsory): self
     {
         $this->compulsory = $compulsory;
+
+        return $this;
+    }
+
+    public function isIsPermanent(): ?bool
+    {
+        return $this->isPermanent;
+    }
+
+    public function setIsPermanent(bool $isPermanent): self
+    {
+        $this->isPermanent = $isPermanent;
 
         return $this;
     }

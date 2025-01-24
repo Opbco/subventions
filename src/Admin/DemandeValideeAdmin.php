@@ -211,13 +211,12 @@ final class DemandeValideeAdmin extends AbstractAdmin
             ->add('structure.typeStructure', null, ['label' => "Type de structure"])
             ->add('structure.forme', null, ['label' => "Type d'enseignement"])
             ->add('structure.ordre', null, ['label' => "Ordre"])
-            ->add('structure.subdivision.division.region.name', null, ['label' => 'Région'])
-            ->add('structure.subdivision.division.name', null, ['label' => 'Département'])
-            ->add('structure.subdivision', null, ['label' => 'Arrondissement'])
             ->add('structure', null, ['label' => 'Structure'])
+            ->add('demandePieces', FieldDescriptionInterface::TYPE_ONE_TO_MANY, [
+                'label' => 'Liste des pièces'
+            ])
             ->add('points', null, ['label' => "Note"])
             ->add('montant', FieldDescriptionInterface::TYPE_CURRENCY, ['label' => 'Montant Montant (Frs CFA)', 'currency' => ''])
-            ->add('user_updated', null, ['label' => 'Validée par'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],

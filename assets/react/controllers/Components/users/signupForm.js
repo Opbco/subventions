@@ -73,7 +73,7 @@ const SignupForm = (props) => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ code_immatriculation: value }),
+              body: JSON.stringify({ code_immatriculation: value, purpose: 1 }),
             }
           );
           return response.status == 200;

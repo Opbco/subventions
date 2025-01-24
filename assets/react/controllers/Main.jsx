@@ -18,8 +18,8 @@ import ErrorPage from "../utils/ErrorPage";
 import PageLayout from "./Pages/PageLayout";
 import SignIn from "./Pages/SignIn";
 import NewDemande from "./Pages/NewDemande";
-import ImprimeEts from "./Components/demandes/ImprimeEts";
 import MyCompteBancaire from "./Pages/MyCompteBancaire";
+import MyDemandes from "./Pages/MyDemandes";
 
 const Main = ({ page }) => {
   const { t } = useTranslation();
@@ -44,6 +44,13 @@ const Main = ({ page }) => {
         {
           path: "demande",
           element: <NewDemande title="Apply for this session"  />,
+          handle: {
+            crumb: () => <Link to="/">{t("home")}</Link>,
+          },
+        }, 
+        {
+          path: "mydemandes",
+          element: <MyDemandes title="List of my applications"  />,
           handle: {
             crumb: () => <Link to="/">{t("home")}</Link>,
           },

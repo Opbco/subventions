@@ -9,12 +9,12 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import TranslateIcon from "@mui/icons-material/Translate";
 import { useTranslation } from "react-i18next";
 import SigninForm from "../Components/users/signinForm";
 import SignupForm from "../Components/users/signupForm";
 import i18n from "i18next";
 import Contact from "../Components/Contact";
+import ResetForm from "../Components/users/resetForm";
 
 const SignIn = (props) => {
   const { t } = useTranslation();
@@ -23,6 +23,19 @@ const SignIn = (props) => {
   React.useEffect(() => {
     document.title = props.title;
   }, []);
+
+  const renderComponent = (t) => {
+    switch (signIn) {
+      case 1:
+        return <SigninForm t={t} reset={() => setSignIn(2)} help={() => setSignIn(3)} signup={() => setSignIn(0)} />;
+      case 2:
+        return <ResetForm t={t} signin={() => setSignIn(1)} help={() => setSignIn(3)} />;
+      case 3:
+        return <Contact t={t} signin={() => setSignIn(1)} signup={() => setSignIn(0)} />;
+      default:
+        return <SignupForm t={t} signin={() => setSignIn(1)} help={() => setSignIn(3)} />;
+    }
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -42,7 +55,7 @@ const SignIn = (props) => {
         <Box
           sx={{
             position: "relative",
-            maxWidth: 600,
+            maxWidth: 700,
             backgroundColor: "#fff3",
             backdropFilter: "blur(15px)",
           }}
@@ -74,21 +87,7 @@ const SignIn = (props) => {
           >
             {t("welcome_title", { ns: "login" })}
           </h5>
-          {signIn == 1 ? (
-            <SigninForm
-              t={t}
-              signup={() => setSignIn(0)}
-              help={() => setSignIn(3)}
-            />
-          ) : signIn == 0 ? (
-            <SignupForm
-              t={t}
-              signin={() => setSignIn(1)}
-              help={() => setSignIn(3)}
-            />
-          ) : (
-            <Contact t={t} signin={() => setSignIn(1)} signup={() => setSignIn(0)} />
-          )}
+          {renderComponent(t)}
         </Box>
       </Grid>
     </Grid>

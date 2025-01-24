@@ -328,7 +328,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                     'data-sonata-icheck' => 'false'
                 ]])
                 ->end()
-                ->with("Contribution à la réalisation de l'éducation  (08pts)", ['class' => 'col-md-12 eligible'])
+                ->with("Contribution à la réalisation de l'éducation  (06pts)", ['class' => 'col-md-12 eligible'])
                 ->add('nombreEleve', null, ['label' => "Nombre d'apprenants (1pt)", 'attr' => ['min' => 0], "help"=>"ESG: minimun de 50 en zone rurale et 100 en zone urbaine. EN: minimum de 20"])
                 ->add('assuranceEleve', null, ['label' => "Assurance des élèves pour l'année en cours (1pt)"])
                 ->add('cotisationSeduc', null, ['label' => "Quotes-parts SEDUC pour l'année en cours (1pt)"])
@@ -336,7 +336,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                     'Choisir' => "",
                     'Zone Urbaine (1pt)' => "Urbain",
                     'Zone Rural / ZEP (2pts)' => "Rural",
-                ], 'label' => "Position géographique (2pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 2pts ; zone urbaine: 1pt"))
+                ], 'label' => "Position géographique (1|2pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 2pts ; zone urbaine: 1pt"))
                 ->end()
                 ->with("Performances de l'établissement (3pts)", ['class' => 'col-md-12 eligible'])
                 ->add('percentExamen', null, ['label' => "Pourcentage moyen de réussite aux examens officiels (OBC, DECC, GCE)", 'attr' => ['min' => 0], "help"=>"NB: - [30% - 50%[ (1pt) - [50% - 70%[ (2pts) - [70% - 100%[ (3pts)"])

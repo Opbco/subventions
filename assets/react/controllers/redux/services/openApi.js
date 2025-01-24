@@ -83,7 +83,7 @@ export const openApi = createApi({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Demande", id })),
+              ...result?.map(({ id }) => ({ type: "Demande", id })),
               { type: "Demande", id: "LIST" },
             ]
           : [{ type: "Demande", id: "LIST" }],

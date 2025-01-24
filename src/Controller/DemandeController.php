@@ -202,7 +202,7 @@ class DemandeController extends AbstractController
                 $jsonDocument = $serializer->serialize(["success" => false, "message" => "Error while uploading the file."], 'json');
                 return new JsonResponse($jsonDocument, Response::HTTP_BAD_REQUEST);
             } catch (\Throwable $th) {
-                $logger->log(0, "Owono Philippe Bribde");
+                $logger->log(0, "Owono Philippe Brice");
                 $logger->log(0, $th->getMessage());
                 $jsonError = $serializer->serialize(['success' => false, 'message' => $th->getMessage()], 'json');
                 return new JsonResponse($jsonError, Response::HTTP_BAD_REQUEST, [], true);
@@ -227,11 +227,11 @@ class DemandeController extends AbstractController
                 break;
             case 'snderrepets':
                 $template = 'pdf/situation_statistique_repets.html.twig';
-                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
+                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem`, `totalAmount` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
                 break;
             case 'snderstsub':
                 $template = 'pdf/situation_statistique_struct_sub.html.twig';
-                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
+                $query = "SELECT `forme`, `ordreId`, `totalScore`, `nbDem`, `totalAmount` FROM `statistics_demandes_marked_subvent` WHERE `sessionId` = ".$session->getId();
                 break;
             default:
                 $template = 'pdf/situation_statistique.html.twig';
@@ -252,20 +252,4 @@ class DemandeController extends AbstractController
             'Content-Disposition' => 'attachment; filename="situation_statistique_demandes_recus_'.$session->getName().'.pdf"'
         ]);
     }
-
-
-    /* #[Route('/admin/demandes/fix', name: 'app_demande_fix_score', methods: ["GET"])]
-    public function fix_demande_score(DemandeRepository $demandeRepository, EntityManagerInterface $em): JsonResponse
-    {
-        $demandes = $demandeRepository->findAll();
-
-        foreach ($demandes as $key => $demande) {
-            $demande->setPoints($demande->getScore());
-            $em->persist($demande);
-        }
-
-        $em->flush();
-
-        return new JsonResponse(null, Response::HTTP_OK, [], false);
-    } */
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\Type\ChangePasswordType;
 use App\Repository\StructureRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,11 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Service\MailerService;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sonata\UserBundle\Entity\UserManager;
 use Sonata\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
@@ -33,6 +36,36 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+    #[Route('/admin/change-password', name: 'change_password_route')]
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager)
+    {
+        $user = $this->getUser();
+        
+        if (!$user->isMustChangePassword()) {
+            return $this->redirectToRoute('sonata_admin_dashboard');
+        }
+
+        $form = $this->createForm(ChangePasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPlainPassword($form->get('newPassword')->getData());
+            $user->setPassword(
+                $passwordHasher->hashPassword($user, $form->get('newPassword')->getData())
+            );
+            $user->setMustChangePassword(false);
+            
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sonata_admin_dashboard');
+        }
+
+        return $this->render('security/change_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
@@ -44,7 +77,11 @@ class SecurityController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         try {
-            $structure = $structureRepository->findOneBy(["code" => $data["code_immatriculation"], "user" => null, "isActive" => true]);
+            if($data["purpose"] == 1){
+                $structure = $structureRepository->findOneBy(["code" => $data["code_immatriculation"], "user" => null, "isActive" => true]);
+            }else{
+                $structure = $structureRepository->findOneBy(["code" => $data["code_immatriculation"]]);
+            }
 
             if($structure){
                 $jsonDocument = $serializer->serialize(["success"=>true, "message" => "Immatriculation authentique"], 'json');

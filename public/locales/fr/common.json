@@ -65,6 +65,29 @@
    "contact": {
         "group": "Personnels ressources en cas de difficultés"
    },
+   "table":{
+        "reference": "Reférence",
+        "dateDemande": "Date",
+        "ptEffectifs": "Effectif des élèves",
+        "assuranceElevePt": "Assurances",
+        "QuoteFenascoPt": "FENASCO",
+        "cotisationSeducPt": "contribution SEDUC",
+        "positionGeoPt": "Geo Position",
+        "apsCnpsPt": "CNPS",
+        "reverseRetenuFiscPt": "Retenus Fiscaux",
+        "percentExamenPt": "Examens",
+        "personnelsPt": "Personnels (P+T)",
+        "permaVacatairePt": "Ration P/T",
+        "conformitePt" : "Conformité",
+        "equipementsPt": "Equipements",
+        "mesuresBarieresPt" : "Mésures Barrières",
+        "cleanSchoolPt": "Clean School",
+        "digitalisationPt": "Digitalisation",
+        "score": "Score",
+        "status": "Statut",
+        "montant": "Montant",
+        "observation": "Observation"
+    },
     "structure": {
         "region":"Région",
         "division": "Département",

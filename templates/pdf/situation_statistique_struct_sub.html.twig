@@ -68,22 +68,22 @@
            <th style="width: 15%;" class="heading">
                Organisations
            </th>
-           <th style="width: 15%;" class="heading">
+           <th style="width: 14%;" class="heading">
                SENAT
            </th>
-           <th style="width: 15%;" class="heading">
+           <th style="width: 14%;" class="heading">
                SEDUC
            </th>
-           <th style="width: 15%;" class="heading">
+           <th style="width: 14%;" class="heading">
                DESG
            </th>
-           <th style="width: 15%;" class="heading">
+           <th style="width: 14%;" class="heading">
                DESTP
            </th>
-           <th style="width: 15%;" class="heading">
+           <th style="width: 14%;" class="heading">
                DEN
            </th>
-           <th style="width: 10%;" class="heading">
+           <th style="width: 15%;" class="heading">
                Total
            </th>
        </tr>
@@ -91,115 +91,115 @@
            <th style="width: 15%;" class="heading_row">
                Catholiques
            </th>
-           <td style="width: 15%;">
-               &nbsp;
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SENAT" and v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SEDUC" and v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESTP" and v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
            <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 10%;">
-               &nbsp;
+               {{ stats|filter(v => v.ordreId == 2)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
        </tr>
        <tr style="font-size: 12px; text-transform: uppercase;">
            <th style="width: 15%;" class="heading_row">
                Islamiques
            </th>
-           <td style="width: 15%;">
-               &nbsp;
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SENAT" and v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SEDUC" and v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESTP" and v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
            <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 10%;">
-               &nbsp;
+               {{ stats|filter(v => v.ordreId == 3)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
        </tr>
        <tr style="font-size: 12px; text-transform: uppercase;">
            <th style="width: 15%;" class="heading_row">
                Protestants
            </th>
-           <td style="width: 15%;">
-               &nbsp;
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SENAT" and v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SEDUC" and v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESTP" and v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
            <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 10%;">
-               &nbsp;
+               {{ stats|filter(v => v.ordreId == 4)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
        </tr>
        <tr style="font-size: 12px; text-transform: uppercase;">
            <th style="width: 15%;" class="heading_row">
                Laïc
            </th>
-           <td style="width: 15%;">
-               &nbsp;
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SENAT" and v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SEDUC" and v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESG" and v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESTP" and v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DEN" and v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
            <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 10%;">
-               &nbsp;
+               {{ stats|filter(v => v.ordreId == 1)|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
        </tr>
        <tr style="font-size: 12px; text-transform: uppercase;">
            <th style="width: 15%;" class="heading_row">
                Total
            </th>
-           <td style="width: 15%;">
-               &nbsp;
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SENAT")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "SEDUC")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESG")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DESTP")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
+           </td>
+           <td style="width: 14%;">
+               {{ stats|filter(v => v.forme == "DEN")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
            <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 15%;">
-               &nbsp;
-           </td>
-           <td style="width: 10%;">
-               &nbsp;
+               {{ stats|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
            </td>
        </tr>
    </table>

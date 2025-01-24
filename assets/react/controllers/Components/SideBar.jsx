@@ -184,7 +184,7 @@ const SideBar = (props) => {
             />
             <Item
               title={t("menu_demandes")}
-              to="/"
+              to="/mydemandes"
               icon={<SourceIcon />}
               selected={selected}
               setSelected={setSelected}

@@ -27,6 +27,9 @@ class User extends BaseUser
     #[ORM\OneToMany(mappedBy: 'user_marking', targetEntity: Demande::class)]
     private Collection $demandesMarked;
 
+    #[ORM\Column(type: 'boolean', options:['defaul' => false])]
+    private ?bool $mustChangePassword = null;
+
     public function __construct()
     {
         $this->demandesMarked = new ArrayCollection();
@@ -83,6 +86,18 @@ class User extends BaseUser
                 $demandesMarked->setUserMarking(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isMustChangePassword(): ?bool
+    {
+        return $this->mustChangePassword;
+    }
+
+    public function setMustChangePassword(bool $mustChangePassword): self
+    {
+        $this->mustChangePassword = $mustChangePassword;
 
         return $this;
     }

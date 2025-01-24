@@ -66,10 +66,10 @@ class StructureController extends AbstractController
             if ($structure) {
                 return new JsonResponse($serializer->serialize($structure, 'json', ['groups' => 'structure:detail']), Response::HTTP_OK, [], true);
             }
-    
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND, [], true);    
+
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND, [], true);
         } catch (\Throwable $th) {
-            $jsonError = $serializer->serialize(['success'=> false, 'message' => $th->getMessage()], 'json');
+            $jsonError = $serializer->serialize(['success' => false, 'message' => $th->getMessage()], 'json');
             return new JsonResponse($jsonError, Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
     }
@@ -78,14 +78,50 @@ class StructureController extends AbstractController
     public function get_structure_demandes(Structure $structure, SerializerInterface $serializer): JsonResponse
     {
         if ($structure) {
+            $demandes = $structure->getDemandes();
+            $data = array();
+            foreach ($demandes as $key => $demande) {
+                if (!$demande->getSession()->isStatus()) {
+                    $data[] = array(
+                        "id" => $demande->getId(),
+                        "session" => $demande->getSession()->getAnneeScolaire(),
+                        "effectif_eleves" => $demande->getPtEffectifs(),
+                        "assurance_eleves" => $demande->getAssuranceElevePt(),
+                        "quote_part_fenasco" => $demande->getQuoteFenascoPt(),
+                        "cotisation_seduc" => $demande->getCotisationSeducPt(),
+                        "position_geographique" => $demande->getPositionGeoPt(),
+                        "aps_cnps" => $demande->getApsCnpsPt(),
+                        "reverse_retenu_fiscale" => $demande->getReverseRetenuFiscPt(),
+                        "pourcentage_examen" => $demande->getPercentExamenPt(),
+                        "personnels" => $demande->getPersonnelsPt(),
+                        "ration_permanent_vacataire" => $demande->getPermaVacatairePt(),
+                        "conformite" => $demande->getConformitePt(),
+                        "equipements" => $demande->getEquipementsPt(),
+                        "mesures_barieres" => $demande->getMesuresBarieresPt(),
+                        "clean_school" => $demande->getCleanSchoolPt(),
+                        "digitalisation" => $demande->getDigitalisationPt(),
+                        "score" => $demande->getScore(),
+                        "montant" => $demande->getMontant(),
+                        "status" => $demande->getStatut(),
+                        "statut" => $demande->getStatutText(),
+                        "observation" => $demande->getRemark(),
+                        "date_demande" => $demande->getDateDemande()->format("d/m/y"),
+                        "user_created" => $demande->getUserCreated() . '',
+                        "user_updated" => $demande->getUserUpdated() . '',
+                        "user_marking" => $demande->getUserMarking() . '',
+                    );
+                }
+            }
+            
+            $jsonResponse = $serializer->serialize($data, 'json');
 
-            return new JsonResponse($serializer->serialize($structure->getDemandes(), 'json', ['groups' => 'demande.list']), Response::HTTP_OK, [], true);
+            return new JsonResponse($jsonResponse, Response::HTTP_OK, [], true);
         }
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND, [], true);
     }
 
-    #[Route('/api/v1/structures/{id}/comptes', name: 'app_structure_compte', methods:["GET"])]
+    #[Route('/api/v1/structures/{id}/comptes', name: 'app_structure_compte', methods: ["GET"])]
     public function get_structure_compte_bancaire(Structure $structure, SerializerInterface $serializer): JsonResponse
     {
         if ($structure) {
@@ -104,18 +140,18 @@ class StructureController extends AbstractController
                 $data = json_decode($request->getContent(), true);
                 $compteOld = $structure->getCompteBancaire();
                 $document = $documentRepository->find(intval($data["copyRIB"]));
-                if($compteOld){
+                if ($compteOld) {
                     $compte = $serializer->deserialize($request->getContent(), CompteBancaire::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $compteOld]);
-                }else{
+                } else {
                     $compte = $serializer->deserialize($request->getContent(), CompteBancaire::class, 'json');
                 }
                 $compte->setCopyRIB($document);
                 $structure->setCompteBancaire($compte);
                 $em->persist($structure);
                 $em->flush();
-                return new JsonResponse($serializer->serialize(['success'=> true, "data" => $structure->getCompteBancaire()], 'json', ['groups' => 'compte.details']), Response::HTTP_CREATED, [], true);
+                return new JsonResponse($serializer->serialize(['success' => true, "data" => $structure->getCompteBancaire()], 'json', ['groups' => 'compte.details']), Response::HTTP_CREATED, [], true);
             } catch (\Throwable $th) {
-                $jsonError = $serializer->serialize(['success'=> false, 'message' => $th->getMessage()], 'json');
+                $jsonError = $serializer->serialize(['success' => false, 'message' => $th->getMessage()], 'json');
                 return new JsonResponse($jsonError, Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
             }
         }

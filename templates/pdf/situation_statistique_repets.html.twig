@@ -95,7 +95,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|filter(v => v.forme == "DESG")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
         <tr style="font-size: 12px; text-transform: uppercase;">
@@ -115,7 +115,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|filter(v => v.forme == "DESTP")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
         <tr style="font-size: 12px; text-transform: uppercase;">
@@ -132,7 +132,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|filter(v => v.forme == "SENAT")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
         <tr style="font-size: 12px; text-transform: uppercase;">
@@ -149,7 +149,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|filter(v => v.forme == "SEDUC")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
         <tr style="font-size: 12px; text-transform: uppercase;">
@@ -166,7 +166,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|filter(v => v.forme == "DEN")|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
         <tr style="font-size: 12px; text-transform: uppercase;">
@@ -183,7 +183,7 @@
                 &nbsp;
             </td>
             <td class="body_center" style="width: 20%;">
-                &nbsp;
+                {{ stats|reduce((total, v) => total + v.totalAmount, 0)|number_format(2, ',', ' ') }}
             </td>
         </tr>
     </table>

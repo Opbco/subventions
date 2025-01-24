@@ -209,10 +209,16 @@ final class DemandeAdmin extends AbstractAdmin
             ->add('structure.typeStructure', null, ['label' => "Type de structure"])
             ->add('structure.forme', null, ['label' => "Type d'enseignement"])
             ->add('structure.ordre', null, ['label' => "Ordre"])
-            ->add('structure.subdivision.division.region.name', null, ['label' => 'Région'])
-            ->add('structure.subdivision.division.name', null, ['label' => 'Département'])
-            ->add('structure.subdivision', null, ['label' => 'Arrondissement'])
             ->add('structure', null, ['label' => 'Structure'])
+            ->add('structure.compteBancaire.numero', null, ['label'=>"Numéro", 'editable' => true, 'required' => true])
+            ->add('structure.compteBancaire.intitule', null, ['label'=>"Intitulé", 'editable' => true, 'required' => true])
+            ->add('structure.compteBancaire.copyRIB', FieldDescriptionInterface::TYPE_STRING, [
+                'label' => 'Name of the document',
+                'template' => '@SonataAdmin/CRUD/list_file.html.twig',
+            ])
+            ->add('structure.subdivision', null, ['label' => 'Arrondissement'])
+            ->add('structure.subdivision.division.name', null, ['label' => 'Département'])
+            ->add('structure.subdivision.division.region.name', null, ['label' => 'Région'])
             ->add('user_created', null, ['label' => 'Crée par'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
