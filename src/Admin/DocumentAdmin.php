@@ -61,7 +61,7 @@ final class DocumentAdmin extends AbstractAdmin
         if ($doc && ($webPath = $doc->getFileWebPath())) {
             $fullPath = $doc->getFileAbsolutePath();
             // add a 'help' option containing the preview's img tag
-            $fileFormOptions['help'] = is_file($fullPath . '') ? '<a target="_blank" style="display:block;margin-top:-3rem;" href="' . $webPath . '">' . $doc->getFileName() . '</a>' : 'document unavailable';
+            $fileFormOptions['help'] = is_file($fullPath . '') ? '<a target="_blank" style="display:block;margin-top:-2rem;" href="' . $webPath . '">' . $doc->getFileName() . '</a>' : 'document unavailable';
             $fileFormOptions['help_html'] = true;
         }
         $form

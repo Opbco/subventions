@@ -202,7 +202,7 @@ class DemandeController extends AbstractController
                 $jsonDocument = $serializer->serialize(["success" => false, "message" => "Error while uploading the file."], 'json');
                 return new JsonResponse($jsonDocument, Response::HTTP_BAD_REQUEST);
             } catch (\Throwable $th) {
-                $logger->log(0, "Owono Philippe Brice");
+                $logger->log(0, "Owono Philippe Bribde");
                 $logger->log(0, $th->getMessage());
                 $jsonError = $serializer->serialize(['success' => false, 'message' => $th->getMessage()], 'json');
                 return new JsonResponse($jsonError, Response::HTTP_BAD_REQUEST, [], true);
@@ -252,4 +252,20 @@ class DemandeController extends AbstractController
             'Content-Disposition' => 'attachment; filename="situation_statistique_demandes_recus_'.$session->getName().'.pdf"'
         ]);
     }
+
+
+    /* #[Route('/admin/demandes/fix', name: 'app_demande_fix_score', methods: ["GET"])]
+    public function fix_demande_score(DemandeRepository $demandeRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $demandes = $demandeRepository->findAll();
+
+        foreach ($demandes as $key => $demande) {
+            $demande->setPoints($demande->getScore());
+            $em->persist($demande);
+        }
+
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK, [], false);
+    } */
 }

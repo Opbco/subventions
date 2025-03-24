@@ -44,10 +44,10 @@ const Entete = (props) => {
                 </Typography>
             </Stack>
         </Stack>
-        <Typography variant="h4">
+        <Typography variant="h5">
             Demande de subvention financière de l'état aux organisations et aux établissements scolaires ou formations privés d'enseignement secondaire et normal
         </Typography>
-        <Typography variant="h4">
+        <Typography variant="h5">
             Année budgetaire {new Date(props.user.session.dateOpen.date).getFullYear()}
         </Typography>
     </Stack>

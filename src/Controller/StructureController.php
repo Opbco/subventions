@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\CompteBancaire;
 use App\Entity\Demande;
 use App\Entity\Document;
-use App\Entity\Session;
 use App\Entity\Structure;
 use App\Repository\DemandeRepository;
 use App\Repository\DocumentRepository;
@@ -51,9 +50,9 @@ class StructureController extends AbstractController
     {
         $isong = $request->query->get("isong", 0);
         if ($isong) {
-            $pieces = $pieceRepository->findBy(['isOng' => $isong], ['id' => 'ASC']);
+            $pieces = $pieceRepository->findBy(['isOng' => $isong], ['ordre' => 'ASC']);
         } else {
-            $pieces = $pieceRepository->findAll();
+            $pieces = $pieceRepository->findBy([], ['ordre' => 'ASC']);
         }
 
         return new JsonResponse($serializer->serialize($pieces, 'json', ['groups' => 'piece.list']), Response::HTTP_OK, [], true);
@@ -120,7 +119,7 @@ class StructureController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND, [], true);
     }
-
+    
     #[Route('/api/v1/structures/{id}/comptes', name: 'app_structure_compte', methods: ["GET"])]
     public function get_structure_compte_bancaire(Structure $structure, SerializerInterface $serializer): JsonResponse
     {

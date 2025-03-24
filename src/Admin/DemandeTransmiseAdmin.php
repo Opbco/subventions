@@ -10,6 +10,7 @@ use App\Entity\FormStructure;
 use App\Entity\Langue;
 use App\Entity\Order;
 use App\Entity\Region;
+use App\Entity\Session;
 use App\Entity\Structure;
 use App\Entity\SubDivision;
 use App\Entity\User;
@@ -55,6 +56,14 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
     {
         $filter
             ->add('id')
+            ->add('session', null, [
+                'label' => 'Session',
+                'field_type' => EntityType::class,
+                'field_options' => [
+                    'class' => Session::class,
+                    'choice_label' => 'anneeScolaire',
+                ],
+            ])
             ->add('dateDemande', DateTimeRangeFilter::class, ['label' => 'Date de la demande'])
             ->add('nombreEleve', null, ['label' => "Nombre d'élèves"])
             ->add('nombrePersonnelEnseignant', null, ['label' => "Nombre d'enseignants"])
@@ -171,6 +180,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
         $query = parent::configureQuery($query);
         $rootAlias = current($query->getRootAliases());
         $query->andWhere($rootAlias. '.statut = 1');
+        $query->andWhere($rootAlias. '.session = SessionCurrent() ');
         if ($role != "ROLE_SUPER_ADMIN" and $role != "ROLE_ADMIN_CELINFO") {
             switch ($role) {
                 case 'ROLE_ADMIN_DESG':
@@ -327,6 +337,9 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                 ->add('quoteFenasco', null, ['label' => "Quotes-parts FENASCO pour l'année en cours", 'attr' => [
                     'data-sonata-icheck' => 'false'
                 ]])
+                ->add('immatriculationImpot', null, ['label' => "Attestation d’immatriculation DGI/MINFI ", 'attr' => [
+                    'data-sonata-icheck' => 'false'
+                ]])
                 ->end()
                 ->with("Contribution à la réalisation de l'éducation  (06pts)", ['class' => 'col-md-12 eligible'])
                 ->add('nombreEleve', null, ['label' => "Nombre d'apprenants (1pt)", 'attr' => ['min' => 0], "help"=>"ESG: minimun de 50 en zone rurale et 100 en zone urbaine. EN: minimum de 20"])
@@ -335,28 +348,28 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                 ->add('zone', ChoiceType::class, array('choices' => [
                     'Choisir' => "",
                     'Zone Urbaine (1pt)' => "Urbain",
-                    'Zone Rural / ZEP (2pts)' => "Rural",
-                ], 'label' => "Position géographique (1|2pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 2pts ; zone urbaine: 1pt"))
+                    'Zone Semi-Urbaine (2pts)' => "Semi-Urbain",
+                    'Zone Rural / ZEP (3pts)' => "Rural",
+                ], 'label' => "Position géographique (3pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 3pts ; Zone semi-urbain: 2pts; zone urbaine: 1pt"))
                 ->end()
-                ->with("Performances de l'établissement (3pts)", ['class' => 'col-md-12 eligible'])
-                ->add('percentExamen', null, ['label' => "Pourcentage moyen de réussite aux examens officiels (OBC, DECC, GCE)", 'attr' => ['min' => 0], "help"=>"NB: - [30% - 50%[ (1pt) - [50% - 70%[ (2pts) - [70% - 100%[ (3pts)"])
+                ->with("Performances de l'établissement (4pts)", ['class' => 'col-md-12 eligible'])
+                ->add('percentExamen', null, ['label' => "Pourcentage moyen de réussite aux examens officiels (OBC, DECC, GCE)", 'attr' => ['min' => 0], "help"=>"NB: - [30% - 50%[ (2pts) - [50% - 70%[ (3pts) - [70% - 100%[ (4pts)"])
                 ->end()
                 ->with("Ressources humaines (4pts)", ['class' => 'col-md-12 eligible'])
                 ->add('personnel_autorise', null, ['label' => "Personnel enseignant autorisé à enseigner (1pt)"])
                 ->add('personnel_contract', null, ['label' => "Personnel enseignant avec un contrat de travail (1pt)"])
                 ->add('nombrePersonnelEnseignant', null, ['label' => "Nombre de personnel enseignant", 'attr' => ['min' => 1]])
                 ->add('nombrePersonnelPermanent', null, ['label' => "Nombre de personnel enseignant permanent", 'attr' => ['min' => 0]])
-                ->add('permaVacataire', PercentType::class, ['label' => "Ratio personnel enseignants permanents", 'disabled' => true, "help"=>"NB: - [0% - 40%[ (0pt) - [40% - 60%[ (1pt) - [60% - 100%[ (2pts)"])
+                ->add('permaVacataire', PercentType::class, ['label' => "Ratio personnel enseignants permanents (2pts)", 'disabled' => true, "help"=>"NB: - [0% - 40%[ (0pt) - [40% - 60%[ (1pt) - [60% - 100%[ (2pts)"])
                 ->end();
                 if($isEstp){
-                    $form->with("Infrastructures et équipements (08 pts)", ['class' => 'col-md-12 eligible'])
+                    $form->with("Infrastructures et équipements (09 pts)", ['class' => 'col-md-12 eligible'])
                     ->add('nombreSalleSuffisant', null, ['label' => "Salles de classes adaptées et conformes (1pt)"])
-                    ->add('existAtelier', null, ['label' => "Existence d'ateliers pratiques (1pt)"])
+                    ->add('existAtelier', null, ['label' => "Existence d'ateliers pratiques (2pts)"])
                     ->add('laboSalleSpecialisee', ChoiceType::class, array('choices' => [
                         'Pas du tout (0pt)' => 0,
-                        'Un peu (1pt)' => 1,
-                        'Assez (2pts)' => 2
-                    ], 'label' => 'Laboratoires et salles spécialisées en quantité et qualité (2pts)', 'required' => true))
+                        'Assez (1pts)' => 1
+                    ], 'label' => "Laboratoires et salles spécialisées en quantité et qualité (1pt)", 'required' => true))
                     ->add('materielDidactique', null, ['label' => "Matériel didactique en quantité et qualité requises (1pt)"])
                     ->add('equipements', ChoiceType::class, array('choices' => [
                         'Aucun (0pt)' => 0,
@@ -367,8 +380,8 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
                     ->add('mesuresBarieres', null, ['label' => "Dispositif mis en place pour les mesures barrières (1pt)"])
                     ->end();
                 }else{
-                    $form->with("Infrastructures et équipements (05 pts)", ['class' => 'col-md-12 eligible'])
-                    ->add('nombreSalleSuffisant', null, ['label' => "Existence des infrastucture adaptées et conformes à la règlementation en vigueur (1pt)"])
+                    $form->with("Infrastructures et équipements (06 pts)", ['class' => 'col-md-12 eligible'])
+                    ->add('nombreSalleSuffisant', null, ['label' => "Existence des infrastucture adaptées et conformes à la règlementation en vigueur (2pts)"])
                     ->add('materielDidactique', null, ['label' => "Matériel didactique en quantité et qualité requises (1pt)"])
                     ->add('laboSalleSpecialisee', ChoiceType::class, array('choices' => [
                         'Pas du tout (0pt)' => 0,
@@ -451,6 +464,7 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
             ->add('reverseRetenuFisc', null, ['label' => "Reversement des retenues fiscales"])
             ->add('apsCnps', null, ['label' => "Cotisations sociales des personnels permanents"])
             ->add('quoteFenasco', null, ['label' => "Quotes-parts FENASCO pour l'année en cours"])
+            ->add('immatriculationImpot', null, ['label' => "Attestation d'immatriculation unique (NIU) des impôts"])
             ->end()
             ->with("Contribution à la réalisation de l'éducation  (08pts)", ['class' => 'col-md-12'])
             ->add('nombreEleve', null, ['label' => "Nombre d'élèves (1pt)", "help"=>"ESG: minimun de 50 en zone rurale et 100 en zone urbaine. EN: minimum de 20"])
@@ -527,6 +541,11 @@ final class DemandeTransmiseAdmin extends AbstractAdmin
             ->add('date_updated', null, ['label' => 'Modifié le'])
             ->add('user_created.username', null, ['label' => 'Créé par'])
             ->add('user_updated.username', null, ['label' => 'Modifié par'])
+            ->end()
+            ->end()
+            ->tab('Pièces de la demande')
+            ->with('Pièces jointes', ['class' => 'col-md-12'])
+            ->add('demandePieces', FieldDescriptionInterface::TYPE_ONE_TO_MANY, ['label' => ' '])
             ->end()
             ->end();
     }

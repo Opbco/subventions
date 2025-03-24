@@ -17,6 +17,7 @@ import {
   Link,
   IconButton,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Error from "../../controllers/Error";
@@ -61,16 +62,16 @@ const MyCompteBancaire = (props) => {
   }, []);
 
   useEffect(() => {
-      setInitialValues({
-        id: compte?.id || 0,
-        numero: compte?.numero || "",
-        intitule: compte?.intitule || "",
-        nameBanque: compte?.nameBanque || "",
-        copyRIB: compte?.copyRIB?.id || 0,
-      });
-      if(compte?.copyRIB){
-        setCopyRib(compte?.copyRIB);
-      }
+    setInitialValues({
+      id: compte?.id || 0,
+      numero: compte?.numero || "",
+      intitule: compte?.intitule || "",
+      nameBanque: compte?.nameBanque || "",
+      copyRIB: compte?.copyRIB?.id || 0,
+    });
+    if (compte?.copyRIB) {
+      setCopyRib(compte?.copyRIB);
+    }
   }, [compte]);
 
   const checkoutSchema = yup.object().shape({
@@ -149,6 +150,7 @@ const MyCompteBancaire = (props) => {
         setCopyRib(res.data?.data);
         setFieldValue("copyRIB", res.data.data?.id);
       } else {
+        console.log(res);
         props.setInfoMsg({
           message: res?.error?.data.message,
           severity: "error",
@@ -189,7 +191,16 @@ const MyCompteBancaire = (props) => {
           }}
         >
           <Box>
-            <Typography variant="h4" marginTop={3} marginBottom={6}>{t("account_details")}</Typography>
+            <Typography variant="h4" marginTop={3} marginBottom={6}>
+              {t("account_details")}
+            </Typography>
+            <Alert
+              variant="outlined"
+              severity="warning"
+              sx={{ marginBlock: 5, fontSize: 16 }}
+            >
+              {t("alert_account_message")}
+            </Alert>
             <Field
               id="nameBanque"
               label={t("form.namebanque")}
@@ -197,6 +208,7 @@ const MyCompteBancaire = (props) => {
               name="nameBanque"
               variant="standard"
               InputLabelProps={{ shrink: true }}
+              placeholder="COMMERCIAL MINESEC BANK"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.nameBanque}
@@ -209,6 +221,7 @@ const MyCompteBancaire = (props) => {
               fullWidth
               name="numero"
               variant="standard"
+              placeholder="10005 00003 00142124412 20"
               InputLabelProps={{ shrink: true }}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -221,6 +234,7 @@ const MyCompteBancaire = (props) => {
               label={t("form.intitule")}
               fullWidth
               name="intitule"
+              placeholder="COLLEGE SAINT MINESEC"
               variant="standard"
               InputLabelProps={{ shrink: true }}
               onBlur={handleBlur}

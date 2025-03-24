@@ -179,6 +179,9 @@ class Demande
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user_marking = null;
 
+    #[ORM\Column(nullable: true, options:["default" => 0])]
+    private ?bool $immatriculationImpot = null;
+
     public function __construct()
     {
         $this->demandePieces = new ArrayCollection();
@@ -364,7 +367,12 @@ class Demande
 
     public function getConformitePt(): ?int
     {
-        return $this->laboSalleSpecialisee + $this->nombreSalleSuffisant + $this->existAtelier;
+        $isEstp = $this->getStructure()->isEstp();
+
+        $labs = $isEstp ? (int) $this->laboSalleSpecialisee : ($this->laboSalleSpecialisee? 2: 0);
+        $nbSalle = $isEstp ? (int) $this->nombreSalleSuffisant : ($this->nombreSalleSuffisant? 2: 0);
+
+        return $labs + $nbSalle + $this->existAtelier;
     }
 
     public function getEquipementsPt(): ?int
@@ -404,11 +412,11 @@ class Demande
             if($this->percentExamen < 30){
                 $pt = 0;
             }elseif($this->percentExamen < 50){
-                $pt = 1;
-            }elseif($this->percentExamen < 70){
                 $pt = 2;
-            }else{
+            }elseif($this->percentExamen < 70){
                 $pt = 3;
+            }else{
+                $pt = 4;
             }
         }
         return $pt;
@@ -673,7 +681,7 @@ class Demande
         if($this->structure->getTypeStructure() != 'Etablissement'){
             return 0;
         }
-        return is_null($this->getZone()) ? 0 : ($this->getZone() == "Urbain" ? 1 : 2);
+        return is_null($this->getZone()) ? 0 : (($this->getZone() == "Urbain") ? 1 : ($this->getZone() == "Semi-Urbain" ? 2 : 3));
     }
 
 
@@ -830,6 +838,18 @@ class Demande
     public function setUserMarking(?User $user_marking): self
     {
         $this->user_marking = $user_marking;
+
+        return $this;
+    }
+
+    public function isImmatriculationImpot(): ?bool
+    {
+        return $this->immatriculationImpot;
+    }
+
+    public function setImmatriculationImpot(bool $immatriculationImpot): self
+    {
+        $this->immatriculationImpot = $immatriculationImpot;
 
         return $this;
     }

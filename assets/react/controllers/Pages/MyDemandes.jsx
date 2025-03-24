@@ -54,7 +54,6 @@ const MyDemandes = (props) => {
     document.title = props.title;
   }, []);
 
-
   return isFetching ? (
     <Loading />
   ) : (
@@ -66,58 +65,6 @@ const MyDemandes = (props) => {
             <StyledTableCell align="right">
               {t("table.dateDemande")}
             </StyledTableCell>
-            {props.structure.quality == "Etablissement" && (
-              <>
-                <StyledTableCell align="right">
-                  {t("table.ptEffectifs")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.assuranceElevePt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.QuoteFenascoPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.cotisationSeducPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.positionGeoPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.apsCnpsPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.reverseRetenuFiscPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.percentExamenPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.personnelsPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.permaVacatairePt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.conformitePt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.equipementsPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.mesuresBarieresPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.cleanSchoolPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.digitalisationPt")}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {t("table.score")}
-                </StyledTableCell>
-              </>
-            )}
             <StyledTableCell align="right">{t("table.status")}</StyledTableCell>
             <StyledTableCell align="right">
               {t("table.montant")}
@@ -128,7 +75,7 @@ const MyDemandes = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row) => (
+          {Boolean(data?.length)? data?.map((row) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
                 {row.session}
@@ -136,61 +83,15 @@ const MyDemandes = (props) => {
               <StyledTableCell align="right">
                 {row.date_demande}
               </StyledTableCell>
-              {props.structure.quality == "Etablissement" && (
-                <>
-                  <StyledTableCell align="right">
-                    {row.effectif_eleves}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.assurance_eleves}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.quote_part_fenasco}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.cotisation_seduc}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.position_geographique}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.aps_cnps}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.reverse_retenu_fiscale}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.pourcentage_examen}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.personnels}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.ration_permanent_vacataire}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.conformite}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.equipements}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.mesures_barieres}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.clean_school}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.digitalisation}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{row.score}</StyledTableCell>
-                </>
-              )}
               <StyledTableCell align="right">{row.statut}</StyledTableCell>
               <StyledTableCell align="right">{row.montant}</StyledTableCell>
               <StyledTableCell align="right">{row.observation}</StyledTableCell>
             </StyledTableRow>
-          ))}
+          )): (<StyledTableRow>
+              <StyledTableCell colSpan={5} align="center">
+                {t('empty_demands')}
+              </StyledTableCell>
+            </StyledTableRow>)}
         </TableBody>
       </Table>
     </TableContainer>

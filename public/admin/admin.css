@@ -51,3 +51,13 @@
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+td.sonata-ba-list-field-one_to_many{
+  max-height: 14em;
+  display: block;
+  overflow: scroll;
+}
+
+tr.sonata-ba-view-container  th{
+  width: min(10rem, 50%);
+}

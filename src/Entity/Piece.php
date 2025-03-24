@@ -66,7 +66,16 @@ class Piece
     private ?bool $compulsory = null;
 
     #[ORM\Column(options:['default' => 0])]
+    #[Groups(['piece.list', 'demande.details'])]
     private ?bool $isPermanent = null;
+
+    #[ORM\Column(options:['default' => 0])]
+    #[Groups(['piece.list', 'demande.details'])]
+    private ?bool $isDestp = null;
+
+    #[ORM\Column(options:['default' => 0])]
+    #[Groups(['piece.list', 'demande.details'])]
+    private ?int $ordre = null;
 
     public function __toString()
     {
@@ -206,6 +215,30 @@ class Piece
     public function setIsPermanent(bool $isPermanent): self
     {
         $this->isPermanent = $isPermanent;
+
+        return $this;
+    }
+
+    public function isIsDestp(): ?bool
+    {
+        return $this->isDestp;
+    }
+
+    public function setIsDestp(bool $isDestp): self
+    {
+        $this->isDestp = $isDestp;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
 
         return $this;
     }

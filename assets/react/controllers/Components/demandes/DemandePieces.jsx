@@ -37,7 +37,6 @@ import Error from "../../../controllers/Error";
 import CONSTANTS from "../../../utils/Constants";
 import Swal from "sweetalert2";
 import i18n from "i18next";
-import Loading from "../../../utils/Loading";
 
 const DemandePieces = (props) => {
   const { t } = useTranslation();
@@ -75,8 +74,8 @@ const DemandePieces = (props) => {
   ] = useUploadDemandeFileMutation();
 
   useEffect(() => {
-    const compulPiece = mypieces?.filter((pie) => pie.piece?.compulsory);
-    const compulsoryPieces = pieces?.filter((pie) => pie.compulsory);
+    const compulPiece = mypieces?.filter((pie) => pie.piece?.compulsory && (pie.piece?.isDestp ? props.structure.isTech : true));
+    const compulsoryPieces = pieces?.filter((pie) => pie.compulsory && (pie.isDestp ? props.structure.isTech : true));
 
     props.setValide(compulPiece?.length != compulsoryPieces?.length);
   }, [mypieces, pieces]);
@@ -205,7 +204,7 @@ const DemandePieces = (props) => {
         onChange={handleNewFile}
         accept="image/png, image/jpeg, .pdf"
       />
-      {mypieces?.length != pieces?.length ? (
+      {props.valide? (
         <Alert variant="filled" severity="error">
           <AlertTitle>{t("message.file_upload_alert")}</AlertTitle>
           <AlertTitle>{t("message.file_upload_incomplet")}</AlertTitle>
@@ -276,7 +275,7 @@ const DemandePieces = (props) => {
                       disabled={
                         !Boolean(
                           mypieces?.find((val) => val?.piece.id == piece.id)
-                        )
+                        )  || piece.isPermanent == true
                       }
                       onClick={() => handleDeleteClick(piece.id)}
                     >

@@ -25,6 +25,7 @@ import { setInfoMsg } from "./../redux/actions/configActions";
 import DemandePieces from "../Components/demandes/DemandePieces";
 import ImprimeEts from "../Components/demandes/ImprimeEts";
 import Loading from "../../utils/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Grid = styled("div")(
   ({ theme }) => `
@@ -95,6 +96,7 @@ const NewDemande = (props) => {
       skip: false,
     }
   );
+  const navigate = useNavigate();
 
   const [updateDemande, { isLoading: isUpdating }] = useEditDemandeMutation();
 
@@ -104,6 +106,10 @@ const NewDemande = (props) => {
 
   useEffect(() => {
     if (demande) {
+      if(!Boolean(demande.structure.compteBancaire?.id)){
+        navigate('/compteBancaire');
+      }
+
       setInitialValues({
         nombreEleve: demande?.nombreEleve || 0,
         nombrePersonnelEnseignant: demande?.nombrePersonnelEnseignant || 0,
@@ -500,7 +506,7 @@ const NewDemande = (props) => {
         </StructureContainer>
         <PieceContainer>
           {Boolean(demande) && (
-            <DemandePieces demandeId={demande?.id} setValide={setValide} />
+            <DemandePieces demandeId={demande?.id} setValide={setValide} valide={valide} />
           )}
         </PieceContainer>
       </Grid>

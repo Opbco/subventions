@@ -53,6 +53,7 @@ class DemandePiece
         normalizationContext: [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i'],
         denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => \DateTime::RFC3339],
     )]
+    #[Groups(['demande.details'])]
     private ?\DateTimeInterface $date_created = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

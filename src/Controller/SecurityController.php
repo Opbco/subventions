@@ -9,11 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Sonata\UserBundle\Entity\UserManager;
-use Sonata\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -119,7 +116,7 @@ class SecurityController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
         try {
-            $user = $userRepository->findByUserName($data["username"]);
+            $user = $userRepository->findByUsername($data["username"]);
             if($user){
                throw new \Exception("Username already used");  
             }

@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
@@ -362,5 +363,25 @@ final class StructureAdmin extends AbstractAdmin
           }
       
           return $actions;
+    }
+
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
+    {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        $id = $admin->getRequest()->get('id');
+
+        $menu->addChild('Détails', $admin->generateMenuUrl('show', ['id' => $id]));
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('Modifier', $admin->generateMenuUrl('edit', ['id' => $id]));
+        }
+
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('Demandes', $admin->generateMenuUrl('admin.demande.list', ['id' => $id]));
+        }
     }
 }

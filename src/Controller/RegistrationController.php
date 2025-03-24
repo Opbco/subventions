@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-use function PHPUnit\Framework\isNull;
-
 class RegistrationController extends AbstractController
 {
     #[Route('/{_locale<%locales%>}/register', name: 'app_register')]
@@ -70,6 +68,7 @@ class RegistrationController extends AbstractController
                 );
 
                 $user->setEnabled(true);
+                $user->setMustChangePassword(false);
                 $entityManager->persist($user);
 
                 $structure->setUser($user);

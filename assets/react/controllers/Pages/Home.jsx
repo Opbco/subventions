@@ -11,6 +11,10 @@ const Home = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  useEffect(()=>{
+    document.title = "Welcome to FG-MINESEC";
+  }, [])
+
   return (
     <Box sx={{ flexGrow: 1, maxWidth: "100%" }}>
       <Typography variant="h3" textAlign="center">

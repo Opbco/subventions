@@ -93,6 +93,7 @@ services:
       - { name: sonata.admin, model_class: App\Entity\Structure, controller: App\Controller\StructureAdminController, manager_type: orm, group: Structure, label: Structure }
     calls:
       - [addChild, ["@admin.compte_bancaire", "structure"]]
+      - [addChild, ["@admin.demande", "structure"]]
 
   admin.compte_bancaire:
     class: App\Admin\CompteBancaireAdmin

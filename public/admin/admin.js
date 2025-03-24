@@ -32,9 +32,24 @@ $(document).ready(function () {
     let perens = $("input[id$='nombrePersonnelEnseignant']").val() || 1;
     $("input[id$='permaVacataire']").val(Math.round((perperm / perens) * 100));
   });
+
   $("input[id$='nombrePersonnelEnseignant']").change(() => {
     let perperm = $("input[id$='nombrePersonnelPermanent']").val();
     let perens = $("input[id$='nombrePersonnelEnseignant']").val() || 1;
     $("input[id$='permaVacataire']").val(Math.round((perperm / perens) * 100));
   });
+
+  var listPieceTds = $('td.sonata-ba-list-field-one_to_many');
+
+  listPieceTds.each(function(){
+        var links = $(this).find('a');
+        var ol = $('<ol>');
+        links.each(function(){
+            var li = $('<li>');
+            $(this).attr('target', '_blank');
+            li.append($(this));
+            ol.append(li);
+        })
+        $(this).html(ol);
+  })
 });

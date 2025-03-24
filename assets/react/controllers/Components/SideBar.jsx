@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Sidebar,
   Menu,
@@ -48,12 +48,16 @@ const SideBar = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelect] = useState("Dashboard");
 
-  //console.log(props.access_token);
+  useEffect(()=>{
+    setSelect(window.location.pathname);
+  },[window.location.pathname])
+  
 
   const setSelected = (item, to, title) => {
     if (to != "/") props.addMenuBread({ to, label: title });
     setSelect(item);
   };
+
 
   const menuItemStyles = {
     root: {
@@ -100,6 +104,7 @@ const SideBar = (props) => {
     }),
   };
 
+  
   return (
     <div
       style={{
@@ -166,22 +171,22 @@ const SideBar = (props) => {
           )}
 
           <Box>
+            <Item
+              title={t("menu_compte")}
+              to="/compteBancaire"
+              icon={<AccountBalanceIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             {Boolean(props.session) && (
               <Item
-                title={t("menu_demande")}
+                title={t("menu_demande", { val: props.session.anneeScolaire })}
                 to="/demande"
                 icon={<CreateNewFolderIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
             )}
-            <Item
-              title={t("menu_structure")}
-              to="/"
-              icon={<FoundationIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <Item
               title={t("menu_demandes")}
               to="/mydemandes"
@@ -190,9 +195,9 @@ const SideBar = (props) => {
               setSelected={setSelected}
             />
             <Item
-              title={t("menu_compte")}
-              to="/compteBancaire"
-              icon={<AccountBalanceIcon />}
+              title={t("menu_structure")}
+              to="/"
+              icon={<FoundationIcon />}
               selected={selected}
               setSelected={setSelected}
             />

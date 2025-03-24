@@ -10,6 +10,7 @@ use App\Entity\FormStructure;
 use App\Entity\Langue;
 use App\Entity\Order;
 use App\Entity\Region;
+use App\Entity\Session;
 use App\Entity\Structure;
 use App\Entity\SubDivision;
 use App\Entity\User;
@@ -56,6 +57,14 @@ final class DemandeAdmin extends AbstractAdmin
     {
         $filter
             ->add('id')
+            ->add('session', null, [
+                'label' => 'Session',
+                'field_type' => EntityType::class,
+                'field_options' => [
+                    'class' => Session::class,
+                    'choice_label' => 'anneeScolaire',
+                ],
+            ])
             ->add('dateDemande', DateTimeRangeFilter::class, ['label' => 'Date de la demande'])
             ->add('nombreEleve', null, ['label' => "Nombre d'élèves"])
             ->add('nombrePersonnelEnseignant', null, ['label' => "Nombre d'enseignants"])
@@ -210,13 +219,20 @@ final class DemandeAdmin extends AbstractAdmin
             ->add('structure.forme', null, ['label' => "Type d'enseignement"])
             ->add('structure.ordre', null, ['label' => "Ordre"])
             ->add('structure', null, ['label' => 'Structure'])
-            ->add('structure.compteBancaire.numero', null, ['label'=>"Numéro", 'editable' => true, 'required' => true])
-            ->add('structure.compteBancaire.intitule', null, ['label'=>"Intitulé", 'editable' => true, 'required' => true])
-            ->add('structure.compteBancaire.copyRIB', FieldDescriptionInterface::TYPE_STRING, [
-                'label' => 'Name of the document',
-                'template' => '@SonataAdmin/CRUD/list_file.html.twig',
-            ])
-            ->add('structure.subdivision', null, ['label' => 'Arrondissement'])
+            ->add('statut', FieldDescriptionInterface::TYPE_CHOICE, [
+                'choices' => [
+                    0 => 'Brouillon',
+                    1 => 'Reçu',
+                    2 => 'Acceptée',
+                    3 => 'Validée',
+                    4 => 'Rejetée'
+                ],
+            ]);
+            if ($this->isChild()) {
+                $list->add('points', null, ['label' => "Note"])
+                    ->add('montant', FieldDescriptionInterface::TYPE_CURRENCY, ['label' => 'Montant (Frs CFA)', 'currency' => '']);
+            }
+            $list->add('structure.subdivision', null, ['label' => 'Arrondissement'])
             ->add('structure.subdivision.division.name', null, ['label' => 'Département'])
             ->add('structure.subdivision.division.region.name', null, ['label' => 'Région'])
             ->add('user_created', null, ['label' => 'Crée par'])
@@ -333,19 +349,23 @@ final class DemandeAdmin extends AbstractAdmin
                 ->add('quoteFenasco', null, ['label' => "Quotes-parts FENASCO pour l'année en cours", 'attr' => [
                     'data-sonata-icheck' => 'false'
                 ]])
+                ->add('immatriculationImpot', null, ['label' => "Attestation d'immatriculation unique (NIU) des impôts", 'attr' => [
+                    'data-sonata-icheck' => 'false'
+                ]])
                 ->end()
-                ->with("Contribution à la réalisation de l'éducation  (08pts)", ['class' => 'col-md-12 eligible'])
+                ->with("Contribution à la réalisation de l'éducation  (06pts)", ['class' => 'col-md-12 eligible'])
                 ->add('nombreEleve', null, ['label' => "Nombre d'apprenants (1pt)", 'attr' => ['min' => 0], "help"=>"ESG: minimun de 50 en zone rurale et 100 en zone urbaine. EN: minimum de 20"])
                 ->add('assuranceEleve', null, ['label' => "Assurance des élèves pour l'année en cours (1pt)"])
                 ->add('cotisationSeduc', null, ['label' => "Quotes-parts SEDUC pour l'année en cours (1pt)"])
                 ->add('zone', ChoiceType::class, array('choices' => [
                     'Choisir' => "",
                     'Zone Urbaine (1pt)' => "Urbain",
-                    'Zone Rural / ZEP (2pts)' => "Rural",
-                ], 'label' => "Position géographique (2pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 2pts ; zone urbaine: 1pt"))
+                    'Zone Semi-Urbaine (2pts)' => "Semi-Urbain",
+                    'Zone Rural / ZEP (3pts)' => "Rural",
+                ], 'label' => "Position géographique (3pts)", "help"=>"NB: Zone rurale | zone d'éduation prioritaire: 2pts ; zone urbaine: 1pt"))
                 ->end()
-                ->with("Performances de l'établissement (3pts)", ['class' => 'col-md-12 eligible'])
-                ->add('percentExamen', null, ['label' => "Pourcentage moyen de réussite aux examens officiels (OBC, DECC, GCE)", 'attr' => ['min' => 0], "help"=>"NB: - [30% - 50%[ (1pt) - [50% - 70%[ (2pts) - [70% - 100%[ (3pts)"])
+                ->with("Performances de l'établissement (4pts)", ['class' => 'col-md-12 eligible'])
+                ->add('percentExamen', null, ['label' => "Pourcentage moyen de réussite aux examens officiels (OBC, DECC, GCE)", 'attr' => ['min' => 0], "help"=>"NB: - [30% - 50%[ (2pts) - [50% - 70%[ (3pts) - [70% - 100%[ (4pts)"])
                 ->end()
                 ->with("Ressources humaines (4pts)", ['class' => 'col-md-12 eligible'])
                 ->add('personnel_autorise', null, ['label' => "Personnel enseignant autorisé à enseigner (1pt)"])
@@ -357,12 +377,12 @@ final class DemandeAdmin extends AbstractAdmin
                 if($isEstp){
                     $form->with("Infrastructures et équipements (08 pts)", ['class' => 'col-md-12 eligible'])
                     ->add('nombreSalleSuffisant', null, ['label' => "Salles de classes adaptées et conformes (1pt)"])
-                    ->add('existAtelier', null, ['label' => "Existence d'ateliers pratiques (1pt)"])
-                    ->add('laboSalleSpecialisee', ChoiceType::class, array('choices' => [
+                    ->add('laboSalleSpecialisee', null, ['label' => "Laboratoires et salles spécialisées en quantité et qualité (2pts)"])
+                    ->add('existAtelier', ChoiceType::class, array('choices' => [
                         'Pas du tout (0pt)' => 0,
                         'Un peu (1pt)' => 1,
                         'Assez (2pts)' => 2
-                    ], 'label' => 'Laboratoires et salles spécialisées en quantité et qualité (2pts)', 'required' => true))
+                    ], 'label' => "Existence d'ateliers pratiques (2pts)", 'required' => true))
                     ->add('materielDidactique', null, ['label' => "Matériel didactique en quantité et qualité requises (1pt)"])
                     ->add('equipements', ChoiceType::class, array('choices' => [
                         'Aucun (0pt)' => 0,
@@ -373,8 +393,8 @@ final class DemandeAdmin extends AbstractAdmin
                     ->add('mesuresBarieres', null, ['label' => "Dispositif mis en place pour les mesures barrières (1pt)"])
                     ->end();
                 }else{
-                    $form->with("Infrastructures et équipements (05 pts)", ['class' => 'col-md-12 eligible'])
-                    ->add('nombreSalleSuffisant', null, ['label' => "Existence des infrastucture adaptées et conformes à la règlementation en vigueur (1pt)"])
+                    $form->with("Infrastructures et équipements (06 pts)", ['class' => 'col-md-12 eligible'])
+                    ->add('nombreSalleSuffisant', null, ['label' => "Existence des infrastucture adaptées et conformes à la règlementation en vigueur (2pts)"])
                     ->add('materielDidactique', null, ['label' => "Matériel didactique en quantité et qualité requises (1pt)"])
                     ->add('laboSalleSpecialisee', ChoiceType::class, array('choices' => [
                         'Pas du tout (0pt)' => 0,
@@ -402,7 +422,9 @@ final class DemandeAdmin extends AbstractAdmin
                 'Reçu' => 1,
                 'Acceptée' => 2,
                 'Rejetée' => 4
-            ], 'label' => 'Statut de la demande', 'required' => true))
+            ], 'label' => 'Statut de la demande', 'required' => true, 'attr' => [
+                'data-sonata-select2' => 'false'
+            ]))
             ->add('remark', TextareaType::class, ['label' => "Remarques", 'required' => false])
             ->end()
             ->end()
@@ -455,6 +477,7 @@ final class DemandeAdmin extends AbstractAdmin
             ->add('reverseRetenuFisc', null, ['label' => "Reversement des retenues fiscales"])
             ->add('apsCnps', null, ['label' => "Cotisations sociales des personnels permanents"])
             ->add('quoteFenasco', null, ['label' => "Quotes-parts FENASCO pour l'année en cours"])
+            ->add('immatriculationImpot', null, ['label' => "Attestation d'immatriculation unique (NIU) des impôts"])
             ->end()
             ->with("Contribution à la réalisation de l'éducation  (08pts)", ['class' => 'col-md-12'])
             ->add('nombreEleve', null, ['label' => "Nombre d'élèves (1pt)", "help"=>"ESG: minimun de 50 en zone rurale et 100 en zone urbaine. EN: minimum de 20"])
@@ -532,28 +555,21 @@ final class DemandeAdmin extends AbstractAdmin
             ->add('user_created.username', null, ['label' => 'Créé par'])
             ->add('user_updated.username', null, ['label' => 'Modifié par'])
             ->end()
+            ->end()
+            ->tab('Pièces de la demande')
+            ->with('Pièces jointes', ['class' => 'col-md-12'])
+            ->add('demandePieces', FieldDescriptionInterface::TYPE_ONE_TO_MANY, ['label' => ' '])
+            ->end()
             ->end();
     }
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         if ($this->isChild()) {
-            return;
+            // This is the route configuration as a parent
+            $collection->clearExcept(['list', 'show', 'export', 'batch', 'create']);
         }
-
         // This is the route configuration as a parent
-        $collection->remove('edit');
-    }
-
-    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
-    {
-        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
-            return;
-        }
-
-        $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
-
-        $menu->addChild('Détails', $admin->generateMenuUrl('show', ['id' => $id]));
+       $collection->clearExcept(['list', 'show', 'export', 'batch']);
     }
 }

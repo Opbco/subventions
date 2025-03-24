@@ -119,7 +119,7 @@ const ImprimeEts = (props) => {
             gap={1}
             flex={1}
             width="100%"
-            marginTop={3}
+            marginTop={2}
           >
             <Stack
               direction="row"
@@ -231,8 +231,8 @@ const ImprimeEts = (props) => {
             gap={1}
             marginTop={1}
           >
-            <Typography variant="h4">pièces jointes:</Typography>
-            <ul style={{ fontSize: "11pt"}}>
+            <Typography variant="h5">pièces jointes:</Typography>
+            <ul style={{ fontSize: "10pt"}}>
               {pieces?.map((piece, i) => (
                 <li key={`piece${i}`}> {piece?.piece.name} </li>
               ))}

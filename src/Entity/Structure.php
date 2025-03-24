@@ -126,6 +126,7 @@ class Structure
     private ?bool $isActive = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(["demande.details"])]
     private ?CompteBancaire $compteBancaire = null;
 
     public function __construct()

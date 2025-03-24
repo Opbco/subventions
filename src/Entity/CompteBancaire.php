@@ -17,15 +17,15 @@ class CompteBancaire
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["compte.details", "compte.list"])]
+    #[Groups(["compte.details", "compte.list", "demande.details"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 40)]
-    #[Groups(["compte.details", "compte.list"])]
+    #[Groups(["compte.details", "compte.list", "demande.details"])]
     private ?string $numero = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["compte.details", "compte.list"])]
+    #[Groups(["compte.details", "compte.list", "demande.details"])]
     private ?string $intitule = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -34,7 +34,7 @@ class CompteBancaire
     private ?Document $copyRIB = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["compte.details", "compte.list"])]
+    #[Groups(["compte.details", "compte.list", "demande.details"])]
     private ?string $nameBanque = null;
 
 
