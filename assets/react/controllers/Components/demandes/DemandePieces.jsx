@@ -224,7 +224,9 @@ const DemandePieces = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pieces?.map((piece, i) => (
+            {pieces?.map((piece, i) => {
+              if(piece?.isDestp && !props.structure.isTech) return null;
+              return (
               <TableRow key={`indexlistp${i}`}>
                 <TableCell align="left">
                   <ListItem>
@@ -275,7 +277,7 @@ const DemandePieces = (props) => {
                       disabled={
                         !Boolean(
                           mypieces?.find((val) => val?.piece.id == piece.id)
-                        )  || piece.isPermanent == true
+                        )
                       }
                       onClick={() => handleDeleteClick(piece.id)}
                     >
@@ -284,7 +286,7 @@ const DemandePieces = (props) => {
                   </Stack>
                 </TableCell>
               </TableRow>
-            ))}
+            ); })}
           </TableBody>
         </Table>
       </TableContainer>

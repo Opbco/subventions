@@ -149,7 +149,7 @@ class DemandeController extends AbstractController
         if ($demandePiece) {
             $filepath = $demandePiece->getFile()->getFileAbsolutePath();
             $demandePieceRepository->remove($demandePiece, true);
-            if (file_exists($filepath)) {
+            if (file_exists($filepath) and !$piece->isIsPermanent()) {
                 unlink($filepath);
             }
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
